@@ -41,14 +41,14 @@ final imLogo= Container(
             decoration: const BoxDecoration(
     image: DecorationImage(
       
-      image: NetworkImage('https://www.vhv.rs/dpng/d/183-1834544_google-flutter-hd-png-download.png')
+      image: AssetImage('assets/iconLogo.png')
       )
   ),
 
 );
 
 final btnEntrar =FloatingActionButton.extended(
-  icon: Icon(Icons.login),
+  icon: const Icon(Icons.login),
   label: const Text('ENTRAR'),
 onPressed: (){
 Navigator.pushNamed(context, '/dash');
@@ -62,7 +62,7 @@ Navigator.pushNamed(context, '/dash');
       fit: BoxFit.cover,
         opacity: .5
         ,
-        image: NetworkImage('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnM2OWVoaWlzYXI5azY5amt3aWphdDh6ajR1dWtkOTc0dHQwb2pydiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BK1EfIsdkKZMY/giphy.gif')
+         image: AssetImage('assets/giphy.gif')
         )
     ),
         child: Padding(
@@ -72,8 +72,8 @@ Navigator.pushNamed(context, '/dash');
             children: [imgFondo,
             Container(
               height: 200,
-              padding: EdgeInsets.all(30),
-              margin: EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.all(30),
+              margin: const EdgeInsets.symmetric(horizontal: 30),
              //color: Colors.grey,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50)
