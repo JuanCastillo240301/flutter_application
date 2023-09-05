@@ -58,7 +58,7 @@ final data = [
     return Scaffold(
       body: ConcentricPageView(
        colors: data.map((e) => e.backgroundColor).toList(),
-      itemCount: 3, // null = infinity
+      itemCount: data.length, // null = infinity
        
        itemBuilder: (int index) {
          return CardPlanet(data: data[index]);
