@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CardPlanetData {
+class CardPMovieData {
   final String title;
   final String subtitle;
   final ImageProvider image;
@@ -9,7 +9,7 @@ class CardPlanetData {
   final Color subtitleColor;
   final Widget? background;
 
-  CardPlanetData({
+  CardPMovieData({
     required this.title,
     required this.subtitle,
     required this.image,
@@ -23,7 +23,7 @@ class CardPlanetData {
 class CardPlanet extends StatelessWidget {
   const CardPlanet({required this.data,Key? key,}) : super(key: key);
 
-  final CardPlanetData data;
+  final CardPMovieData data;
 
  @override
   Widget build(BuildContext context) {

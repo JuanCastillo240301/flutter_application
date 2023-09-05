@@ -4,6 +4,7 @@ import 'package:flutter_application_3/routes.dart';
 import 'package:flutter_application_3/screens/card_movies.dart';
 import 'package:flutter_application_3/screens/login_screen.dart';
 import 'package:concentric_transition/concentric_transition.dart';
+import 'package:lottie/lottie.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,28 +30,31 @@ class home extends StatelessWidget {
 
 
 final data = [
-    CardPlanetData(
-      title: "observe",
+    CardPMovieData(
+      title: "Agrega a lista",
       subtitle:
-          "The night sky has much to offer to those who seek its mystery.",
-      image: const AssetImage("assets/icon1.png"),
-      backgroundColor: const Color.fromRGBO(0, 10, 56, 1),
-      titleColor: Colors.pink,
-      subtitleColor: Colors.white,
-    ),    CardPlanetData(
-      title: "imagine",
-      subtitle: "An endless number of galaxies means endless possibilities.",
-      image: const AssetImage("assets/icon1.png"),
-      backgroundColor: Colors.white,
-      titleColor: Colors.purple,
-      subtitleColor: const Color.fromRGBO(0, 10, 56, 1),
-    ),    CardPlanetData(
-      title: "stargaze",
-      subtitle: "The sky dome is a beautiful graveyard of stars.",
-       image: const AssetImage("assets/icon1.png"),
-      backgroundColor: const Color.fromRGBO(71, 59, 117, 1),
-      titleColor: Colors.yellow,
-      subtitleColor: Colors.white,
+          "Puedes crear listas con todas las peliculas para ver mas tarde.",
+      image: const AssetImage("assets/icon2.jpg"),
+      backgroundColor: Color.fromARGB(255, 83, 97, 163),
+      titleColor: const Color.fromARGB(255, 161, 29, 73),
+      subtitleColor: Color.fromARGB(255, 161, 29, 73),
+      background: LottieBuilder.asset("assets/a1.json")
+    ),    CardPMovieData(
+      title: "Mirar ahira",
+      subtitle: "Miles de peliculas a tu alcanza y a la palma de tu mano.",
+      image: const AssetImage("assets/icon3.jpg"),
+      backgroundColor: const Color.fromARGB(255, 234, 63, 63),
+      titleColor: const Color.fromARGB(255, 188, 139, 197),
+      subtitleColor: Color.fromARGB(255, 188, 139, 197),
+      background: LottieBuilder.asset("assets/a1.json")
+    ),    CardPMovieData(
+      title: "Realiza una Review",
+      subtitle: "Realiza reviews de las peliculas vistas y puntua con estrellas.",
+       image: const AssetImage("assets/icon4.png"),
+      backgroundColor: Color.fromARGB(255, 85, 85, 85),
+      titleColor: Color.fromARGB(227, 249, 226, 20),
+      subtitleColor: const Color.fromARGB(227, 249, 226, 20),
+      background: LottieBuilder.asset("assets/a1.json")
     )];
     
   @override
