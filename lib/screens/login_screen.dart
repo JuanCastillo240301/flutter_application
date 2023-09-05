@@ -73,7 +73,8 @@ Navigator.pushNamed(context, '/dash');
             Container(
               height: 200,
               padding: const EdgeInsets.all(30),
-              margin: const EdgeInsets.symmetric(horizontal: 30),
+              margin: const EdgeInsets.symmetric(horizontal: 60, vertical: 100),
+              
              //color: Colors.grey,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50)
@@ -83,7 +84,7 @@ Navigator.pushNamed(context, '/dash');
               //  padding: EdgeInsets.symmetric(horizontal: 40),
                 children: [
                 textUser,
-                const SizedBox(height: 15,)
+                const SizedBox(height: 20,)
                 ,txtPass
                 ],
               ),
@@ -93,7 +94,7 @@ Navigator.pushNamed(context, '/dash');
           ),
         ),
       ),
-      floatingActionButtonLocation:  FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation:  FloatingActionButtonLocation.centerFloat,
       floatingActionButton: btnEntrar,
     );
   }
