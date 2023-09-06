@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/assets/global_values.dart';
 import 'package:flutter_application_3/assets/styles_app.dart';
 import 'package:flutter_application_3/routes.dart';
 import 'package:flutter_application_3/screens/card_movies.dart';
@@ -15,12 +16,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home:  home(),
-      //home: const LoginScreen(),
-      routes: 
-        getroutes()
-      ,theme: stylesApp.darkTheme(context)
+    return ValueListenableBuilder(
+      valueListenable: GlobalValues.flagTheme,
+      builder: (context, value, _){
+        return MaterialApp(
+          home: const LoginScreen(),
+          //home: const home(),
+          routes: 
+            getroutes()
+          ,theme:  value ?
+                    stylesApp.darkTheme(context):
+                    stylesApp.lightTheme(context)
+                    
+        );
+      }
     );
   }
 }
