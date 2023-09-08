@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';

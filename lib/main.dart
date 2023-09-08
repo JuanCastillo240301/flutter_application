@@ -5,6 +5,7 @@ import 'package:flutter_application_3/routes.dart';
 import 'package:flutter_application_3/screens/card_movies.dart';
 import 'package:flutter_application_3/screens/login_screen.dart';
 import 'package:concentric_transition/concentric_transition.dart';
+import 'package:flutter_application_3/screens/movie_details.dart';
 import 'package:lottie/lottie.dart';
 
 void main() {
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
       valueListenable: GlobalValues.flagTheme,
       builder: (context, value, _){
         return MaterialApp(
-          home: const LoginScreen(),
+          home:  movieDetails(),
+           //home: const LoginScreen()
           //home: const home(),
           routes: 
             getroutes()
