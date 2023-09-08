@@ -2,6 +2,10 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/assets/global_values.dart';
+import 'package:flutter_application_3/routes.dart';
+import 'package:flutter_application_3/screens/login_screen.dart';
+import 'package:flutter_application_3/screens/movie_details.dart';
+import 'package:flutter_application_3/assets/styles_app.dart';
 
 class DashboardScreen extends StatefulWidget {
    const DashboardScreen({super.key});
@@ -39,7 +43,19 @@ Widget createDrawer(){
             trailing: const Icon(Icons.chevron_right),
             title: const Text('FruitApp'),
             subtitle: const Text('Carrusel'), 
-            onTap: (){},
+            onTap: (){(context, value, _){
+        return MaterialApp(
+          home:  movieDetails(),
+          // home: const LoginScreen(),
+          //home: const home(),
+          routes: 
+            getroutes()
+          ,theme:  value ?
+                    stylesApp.darkTheme(context):
+                    stylesApp.lightTheme(context)
+                    
+        );
+      }; },
           ),
           DayNightSwitcher(
             isDarkModeEnabled: GlobalValues.flagTheme.value,

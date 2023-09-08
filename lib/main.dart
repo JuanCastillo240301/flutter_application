@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
       valueListenable: GlobalValues.flagTheme,
       builder: (context, value, _){
         return MaterialApp(
-          home:  movieDetails(),
-           //home: const LoginScreen()
+          //home:  movieDetails(),
+           home: const LoginScreen(),
           //home: const home(),
           routes: 
             getroutes()

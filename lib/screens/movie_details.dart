@@ -38,7 +38,9 @@ class _FirstScreen extends State<movieDetails> {
                 icon: const Icon(
                   Icons.arrow_back,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ],
           ),
@@ -123,7 +125,7 @@ class _FirstScreen extends State<movieDetails> {
     ],
     isRepeatingAnimation: true,
     onTap: () {
-      print("Tap Event");
+     //print("Tap Event");
     },
   ),
 ),
