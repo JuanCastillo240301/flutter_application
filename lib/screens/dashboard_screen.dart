@@ -58,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 100.0),
+            padding: const EdgeInsets.symmetric(horizontal: 80.0),
             child: DayNightSwitcher(
               isDarkModeEnabled: GlobalValues.flagTheme.value,
               onStateChanged: (isDarkModeEnabled) async {
