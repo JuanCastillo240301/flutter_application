@@ -35,27 +35,29 @@ Widget createDrawer(){
           currentAccountPicture: CircleAvatar(
             backgroundImage: AssetImage('assets/giphy.gif'),
           ),
-          accountName: Text('Rubensin'),
-           accountEmail: Text('istorres@gmail.com')
+          accountName: Text('JUAN'),
+           accountEmail: Text('JUAN@gmail.com')
           )
           ,ListTile(
-            leading: Image.asset('assets/icon1.png'),
+            leading: Image.asset('assets/flcl1.jpg'),
             trailing: const Icon(Icons.chevron_right),
-            title: const Text('FruitApp'),
-            subtitle: const Text('Carrusel'), 
-            onTap: (){(context, value, _){
-        return MaterialApp(
-          home:  movieDetails(),
-          // home: const LoginScreen(),
-          //home: const home(),
-          routes: 
-            getroutes()
-          ,theme:  value ?
-                    stylesApp.darkTheme(context):
-                    stylesApp.lightTheme(context)
-                    
-        );
-      }; },
+            title: const Text('FLCL BD 4K'),
+            subtitle: const Text('ANIME SERIES'), 
+            onTap: (){
+              Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>  movieDetails()),
+  );
+            },
+          ),
+          ListTile(
+            leading: Image.asset('assets/flcl2.jpg'),
+            trailing: const Icon(Icons.chevron_right),
+            title: const Text('FLCL BD 4K'),
+            subtitle: const Text('ANIME SERIES'), 
+            onTap: (){
+              Navigator.pushNamed(context, '/task');
+            },
           ),
           DayNightSwitcher(
             isDarkModeEnabled: GlobalValues.flagTheme.value,

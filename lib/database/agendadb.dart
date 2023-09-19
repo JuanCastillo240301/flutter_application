@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_application_3/assets/models/task_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqflite.dart';
@@ -34,8 +35,31 @@ onCreate: _createTables
       idTask INTEGER PRIMARY KEY,
       NameTask VARCHAR(50),
       dscTask VARCHAR(50),
-      sttTask BYTE,
-    )''';
+      sttTask BYTE
+    );''';
     db.execute(query);
   }
+
+Future<int>INSERT(String tblName, Map<String, dynamic> data) async{
+var conexion = await database;
+return conexion!.insert(tblName, data);
+}
+
+Future<int>UPDATE(String tblName, Map<String, dynamic> data) async{
+var conexion = await database;
+return conexion!.update(tblName, data, where: 'idTask = ?',whereArgs:[data['idTask']]);
+}
+
+Future<int>DELETE(String tblName, int idTask) async{
+var conexion = await database;
+return conexion!.delete(tblName, where: 'idTask = ?',whereArgs:[[idTask]]);
+}
+
+Future<List<TaskModel>>GETALLTASK() async{
+var conexion = await database;
+var result = await conexion!.query('tblTareas');
+return result.map((task)=>TaskModel.fromMap(task)).toList();
+
+}
+
 }
