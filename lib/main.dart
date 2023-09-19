@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_3/assets/global_values.dart';
 import 'package:flutter_application_3/assets/styles_app.dart';
 import 'package:flutter_application_3/routes.dart';
-import 'package:flutter_application_3/screens/card_movies.dart';
-import 'package:flutter_application_3/screens/login_page.dart';
-import 'package:flutter_application_3/screens/login_screen.dart';
-import 'package:concentric_transition/concentric_transition.dart';
-import 'package:flutter_application_3/screens/movie_details.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
