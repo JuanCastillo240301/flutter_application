@@ -6,6 +6,7 @@ import 'package:flutter_application_3/routes.dart';
 import 'package:flutter_application_3/screens/login_screen.dart';
 import 'package:flutter_application_3/screens/movie_details.dart';
 import 'package:flutter_application_3/assets/styles_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardScreen extends StatefulWidget {
    const DashboardScreen({super.key});
@@ -60,11 +61,27 @@ Widget createDrawer(){
             },
           ),
           DayNightSwitcher(
-            isDarkModeEnabled: GlobalValues.flagTheme.value,
-            onStateChanged: (isDarkModeEnabled){
+          isDarkModeEnabled: GlobalValues.flagTheme.value,
+          onStateChanged: (isDarkModeEnabled) async {
             GlobalValues.flagTheme.value = isDarkModeEnabled;
-  },
-),
+
+            // Guarda el estado del tema en SharedPreferences
+            final SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setBool('isDarkModeEnabled', isDarkModeEnabled);
+          },
+        ),
+         ElevatedButton(
+              onPressed: () async {
+                // Limpiar el estado de "Recuérdame"
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                
+                //await prefs.remove('rememberMe');
+
+                // Redirigir al LoginPage
+                Navigator.pushReplacementNamed(context, '/loginpage');
+              },
+              child: Text('Logout'),
+            )
       ],
     ),
   );

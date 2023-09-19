@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -83,9 +83,9 @@ class _DatosState extends State<Datos> {
         children: [
           const Text('Email',
         style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
+          color: Colors.red, // Establece el color del texto a rojo
+              fontSize: 25.0,    // Opcional: ajusta el tamaño del texto
+              fontWeight: FontWeight.bold
         ),
         ),
           const SizedBox(height: 5,),
@@ -102,16 +102,16 @@ TextFormField(
           const SizedBox(height: 5,),
           const Text('password',
         style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
+          color: Colors.red, // Establece el color del texto a rojo
+              fontSize: 25.0,    // Opcional: ajusta el tamaño del texto
+              fontWeight: FontWeight.bold
         ),
         ),
           const SizedBox(height: 5,),
           TextField(obscureText: obs,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
-           hintText: 'example@mail.com',
+           hintText: 'Password here',
     hintStyle: TextStyle(color: Colors.red.shade300),  // Cambia el color del texto
     labelStyle: TextStyle(color: Colors.red), 
             suffixIcon: IconButton(icon: const Icon(Icons.remove_red_eye_outlined),
@@ -134,53 +134,96 @@ TextFormField(
 }
 
 class Remember extends StatefulWidget {
-  const Remember({super.key});
+  const Remember({Key? key}) : super(key: key);
 
   @override
   State<Remember> createState() => _RememberState();
 }
 
 class _RememberState extends State<Remember> {
-  bool valor = false;
+  bool? valor;
+
+  @override
+  void initState() {
+    super.initState();
+    // Cargar el estado del checkbox desde SharedPreferences al iniciar
+    loadRememberMeState();
+    valor = false;
+  }
+
+  void loadRememberMeState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      valor = prefs.getBool('rememberMe') ?? false;
+    });
+  }
+
+  void saveRememberMeState(bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('rememberMe', value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
         unselectedWidgetColor: Colors.red,
-         selectedRowColor: Colors.red, // Cambia el color del borde cuando está desmarcado
+        selectedRowColor: Colors.red,
       ),
-      child:
-    Row(
-      children: [
-        Checkbox(value: valor, onChanged: (value) {
-          setState(() {
-            valor == false ? valor = true : valor = false;
-          });
-        },
-    ),],
-    ));
+      child: Row(
+        children: [
+          Checkbox(
+            value: valor ?? false,
+            onChanged: (value) {
+              setState(() {
+                valor = value;
+                // Guardar el estado del checkbox en SharedPreferences al cambiar
+                saveRememberMeState(value ?? false);
+              });
+            },
+            activeColor: Colors.red,
+          ),
+          Text(
+            'Recuérdame',
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 15.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
 class Botones extends StatelessWidget {
-  const Botones({super.key});
+  const Botones({Key? key}) : super(key: key);
 
   @override
+  
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
           width: double.infinity,
           height: 50,
-          child: ElevatedButton(onPressed: (){}, 
-          child: Text('Login',
-          style: TextStyle(
-            color: Colors.white
+          child: ElevatedButton(
+            onPressed: () {
+              // Redirigir al dashboard si "Recuérdame" está activado
+              Navigator.pushNamed(context, '/dash');
+            },
+            child: Text(
+              'Login',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(Color.fromARGB(255, 255, 0, 0)),
+            ),
           ),
-          ),style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 255, 0, 0)),
-          ),
-          ),  
         ),
       ],
     );
