@@ -2,10 +2,7 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/assets/global_values.dart';
-import 'package:flutter_application_3/routes.dart';
-import 'package:flutter_application_3/screens/login_screen.dart';
 import 'package:flutter_application_3/screens/movie_details.dart';
-import 'package:flutter_application_3/assets/styles_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
