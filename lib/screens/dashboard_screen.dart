@@ -16,7 +16,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bienvenido :)'),
+        title: Text(
+          'Bienvenido :)',
+          style: Theme.of(context).textTheme.headline6,
+        ),
       ),
       drawer: createDrawer(),
     );
@@ -26,18 +29,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Drawer(
       child: ListView(
         children: [
-          const UserAccountsDrawerHeader(
+           UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
               backgroundImage: AssetImage('assets/giphy.gif'),
             ),
-            accountName: Text('JUAN'),
-            accountEmail: Text('JUAN@gmail.com'),
+            accountName: Text('JUAN',style: Theme.of(context).textTheme.headline6,),
+            accountEmail: Text('JUAN@gmail.com',style: Theme.of(context).textTheme.headline6,),
           ),
           ListTile(
-            leading: Image.asset('assets/flcl1.jpg'),
+            leading:  SizedBox(
+            width: 50.0, // Ancho deseado
+            height: 50.0, // Alto deseado
+            child: Image.asset('assets/flcl1.jpg'),
+          ),
             trailing: const Icon(Icons.chevron_right),
-            title: const Text('FLCL BD 4K'),
-            subtitle: const Text('ANIME SERIES'),
+            title:  const Text('FLCL BD 4K', style: TextStyle(color: Colors.black, fontSize: 19.0)),
+            subtitle:  Text('dvd series',style: TextStyle(color: Colors.black,fontSize: 20.0), ),
             onTap: () {
               Navigator.push(
                 context,
@@ -46,10 +53,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
           ),
           ListTile(
-            leading: Image.asset('assets/flcl2.jpg'),
+            leading: SizedBox(
+            width: 50.0, // Ancho deseado
+            height: 50.0, // Alto deseado
+            child: Image.asset('assets/ToDo.png'),
+          ),
             trailing: const Icon(Icons.chevron_right),
-            title: const Text('FLCL BD 4K'),
-            subtitle: const Text('ANIME SERIES'),
+            title:  Text('TASK MANAGER',style: TextStyle(color: Colors.black,fontSize: 19.0),),
+            subtitle:  Text('Lista de tareas',style: TextStyle(color: Colors.black,fontSize: 18.0), ),
             onTap: () {
               Navigator.pushNamed(context, '/task');
             },

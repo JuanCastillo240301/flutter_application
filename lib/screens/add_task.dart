@@ -87,7 +87,7 @@ final txtNameTask = TextFormField(
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Task'),
+        title: Text('Add Task',style: Theme.of(context).textTheme.headline6),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
