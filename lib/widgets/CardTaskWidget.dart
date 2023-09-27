@@ -2,68 +2,75 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_3/assets/global_values.dart';
 import 'package:flutter_application_3/assets/models/task_model.dart';
 import 'package:flutter_application_3/database/agendadb.dart';
+import 'package:flutter_application_3/screens/add_task.dart';
 
-// ignore: must_be_immutable
 class CardTaskWidget extends StatelessWidget {
   CardTaskWidget(
-    {super.key,required this.taskModel, this.agendaDB}
+    {super.key,required this.taskModel,
+    this.agendaDB}
   );
 
   TaskModel taskModel;
   AgendaDB? agendaDB;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top:20),
+      margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 224, 0, 0)
+      decoration: const BoxDecoration(
+        color: Colors.green
       ),
       child: Row(
         children: [
           Column(
             children: [
-              Text(taskModel.nameTask ?? 'Default Name'),
-Text(taskModel.dscTask ?? 'Default Description'),
-Text(taskModel.sttTask ?? 'Default state')
+              Text(taskModel.nameTask!),
+              Text(taskModel.dscTask!),
+              Text(taskModel.sttTask!)
             ],
           ),
           Expanded(child: Container()),
           Column(
             children: [
               GestureDetector(
-                onTap: (){},
-              child: Image.asset('assets/icon1.png', height: 50,),
-             
+                onTap: ()=> Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddTask(taskModel: taskModel)
+                  )
+                ),
+                child: Image.asset('assets/icon4.png',height: 50,)
               ),
-               IconButton(onPressed: (){
-                showDialog(
-                  context: context
-                , builder: (context){
-                  return  AlertDialog(
-                    title: Text('Mensaje del sistema'),
-                    content: Text('¿Deseas borrar la tarea?'),
-                    actions: [
-                      TextButton(
-                        onPressed: (){
-                          agendaDB!.DELETE('tblTareas',taskModel.idTask!).then((value) => {
-                            Navigator.pop(context),
-                            GlobalValues.flagTask.value = !GlobalValues.flagTask.value
-                          });
-                        }, 
-                        child: Text('SI')
-                        ),
-                      TextButton(
-                        onPressed: ()=>Navigator.pop(context), 
-                        child: Text('NO')
-                        )
-                    ],
+              IconButton(
+                onPressed: (){
+                  showDialog(
+                    context: context, 
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Mensaje del sistema'),
+                        content: Text('¿Deseas borrar la tarea?'),
+                        actions: [
+                          TextButton(onPressed:(){
+                            agendaDB!.DELETE('tblTareas', taskModel.idTask!)
+                            .then((value){
+                              Navigator.pop(context);
+                              GlobalValues.flagTask.value = !GlobalValues.flagTask.value;
+                            });
+                          }, child: Text('Si')),
+                          TextButton(
+                            onPressed:()=>Navigator.pop(context), 
+                            child: Text('No')
+                          ),
+                        ],
+                      );
+                    },
                   );
-                }
-                );
-               }, icon: Icon(Icons.delete))
+                },
+                icon: Icon(Icons.delete)
+              )
             ],
-          ),
+          )
         ],
       ),
     );

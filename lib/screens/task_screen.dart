@@ -26,15 +26,15 @@ class _TaskScreenState extends State<TaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Task Manager',style: Theme.of(context).textTheme.headline6,),
+        title: Text('Task Manager'),
         actions: [
           IconButton(
-            onPressed: ()=>Navigator.pushNamed(context, '/add',)
+            onPressed: ()=>Navigator.pushNamed(context, '/add')
               .then((value){
                 setState(() {});
               }
             ), 
-            icon: Icon(Icons.task, color: Colors.black)
+            icon: Icon(Icons.task)
           )
         ],
       ),
@@ -48,7 +48,10 @@ class _TaskScreenState extends State<TaskScreen> {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, int index){
-                    return CardTaskWidget(taskModel: snapshot.data![index],agendaDB:agendaDB);
+                    return CardTaskWidget(
+                      taskModel: snapshot.data![index],
+                      agendaDB: agendaDB,
+                    );
                   }
                 );
               }else{

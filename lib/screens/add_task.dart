@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/assets/models/task_model.dart';
 import 'package:flutter_application_3/database/agendadb.dart';
 
 class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+  AddTask({super.key, this.taskModel});
+
+  TaskModel? taskModel;
 
   @override
   State<AddTask> createState() => _AddTaskState();
@@ -10,9 +13,9 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
   
-  String dropDownValue = "Pendiente";
-  final TextEditingController txtConName = TextEditingController();
-  final TextEditingController txtConDsc = TextEditingController();
+  String? dropDownValue = "Pendiente";
+  TextEditingController txtConName = TextEditingController();
+  TextEditingController txtConDsc = TextEditingController();
   List<String> dropDownValues = [
       'Pendiente',
       'Completado',
@@ -25,12 +28,27 @@ class _AddTaskState extends State<AddTask> {
     // TODO: implement initState
     super.initState();
     agendaDB = AgendaDB();
+    if( widget.taskModel != null ){
+      txtConName.text = widget.taskModel!.nameTask!;
+      txtConDsc.text = widget.taskModel!.dscTask!;
+      switch(widget.taskModel!.sttTask){
+        case 'E': dropDownValue = "En proceso"; break;
+        case 'C': dropDownValue = "Completado"; break;
+        case 'P': dropDownValue = "Pendiente";
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
 
-
+    final txtNameTask = TextFormField(
+      decoration: const InputDecoration(
+        label: Text('Tarea'),
+        border: OutlineInputBorder()
+      ),
+      controller: txtConName,
+    );
 
     final txtDscTask = TextField(
       decoration: const InputDecoration(
@@ -40,14 +58,6 @@ class _AddTaskState extends State<AddTask> {
       maxLines: 6,
       controller: txtConDsc,
     );
-
-final txtNameTask = TextFormField(
-  decoration: const InputDecoration(
-    label: Text('Tarea'),
-    border: OutlineInputBorder(),
-  ),
-  controller: txtConName,
-);
   
     final space = SizedBox(height: 10,);
 
@@ -67,27 +77,28 @@ final txtNameTask = TextFormField(
 
     final ElevatedButton btnGuardar = 
       ElevatedButton(
-        onPressed: () {
-  agendaDB!.INSERT('tblTareas', {
-    'nameTask': txtConName.text,
-    'dscTask': txtConDsc.text,
-    'sttTask': dropDownValue.substring(0, 1),
-  }).then((value) {
-    var msj = (value > 0)
-        ? 'La inserción fue exitosa!'
-        : 'Ocurrió un error';
-    var snackbar = SnackBar(content: Text(msj));
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    Navigator.pop(context);
-  });
-},
- 
+        onPressed: (){
+          agendaDB!.INSERT('tblTareas', {
+            'nameTask' : txtConName.text,
+            'dscTask' : txtConDsc.text,
+            'sttTask' : dropDownValue!.substring(0,1)
+          }).then((value){
+            var msj = ( value > 0 ) 
+              ? 'La inserción fue exitosa!'
+              : 'Ocurrió un error';
+            var snackbar = SnackBar(content: Text(msj));
+            ScaffoldMessenger.of(context).showSnackBar(snackbar);
+            Navigator.pop(context);
+          });
+        }, 
         child: Text('Save Task')
       );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Task',style: Theme.of(context).textTheme.headline6),
+        title: widget.taskModel == null 
+          ? Text('Add Task')
+          : Text('Update Task'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),

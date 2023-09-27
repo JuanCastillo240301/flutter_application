@@ -10,7 +10,7 @@ Map<String,WidgetBuilder> getroutes(){
 '/dash' : (BuildContext context) => const DashboardScreen(),
 '/detail' : (BuildContext context) => movieDetails(),
 '/task' : (BuildContext context) => const TaskScreen(),
-'/add' : (BuildContext context) => const AddTask(),
+'/add' : (BuildContext context) => AddTask(),
 '/loginpage' : (BuildContext context) => const LoginPage(),
 
 };
