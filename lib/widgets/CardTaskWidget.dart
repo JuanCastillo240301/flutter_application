@@ -22,7 +22,7 @@ class CardTaskWidget extends StatelessWidget {
         color: Colors.green
       ),
       child: Row(
-        children: [
+        children: [ 
           Column(
             children: [
               Text(taskModel.nameTask!),
