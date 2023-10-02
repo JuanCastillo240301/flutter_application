@@ -5,10 +5,7 @@ import 'package:flutter_application_3/database/agendadb.dart';
 import 'package:flutter_application_3/screens/add_task.dart';
 
 class CardTaskWidget extends StatelessWidget {
-  CardTaskWidget(
-    {super.key,required this.taskModel,
-    this.agendaDB}
-  );
+  CardTaskWidget({super.key, required this.taskModel, this.agendaDB});
 
   TaskModel taskModel;
   AgendaDB? agendaDB;
@@ -18,11 +15,9 @@ class CardTaskWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-        color: Colors.green
-      ),
+      decoration: const BoxDecoration(color: Color(0xFFE53935)),
       child: Row(
-        children: [ 
+        children: [
           Column(
             children: [
               Text(taskModel.nameTask!),
@@ -34,41 +29,43 @@ class CardTaskWidget extends StatelessWidget {
           Column(
             children: [
               GestureDetector(
-                onTap: ()=> Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddTask(taskModel: taskModel)
-                  )
-                ),
-                child: Image.asset('assets/icon4.png',height: 50,)
-              ),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddTask(taskModel: taskModel))),
+                  child: Image.asset(
+                    'assets/icon4.png',
+                    height: 50,
+                  )),
               IconButton(
-                onPressed: (){
-                  showDialog(
-                    context: context, 
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('Mensaje del sistema'),
-                        content: Text('¿Deseas borrar la tarea?'),
-                        actions: [
-                          TextButton(onPressed:(){
-                            agendaDB!.DELETE('tblTareas', taskModel.idTask!)
-                            .then((value){
-                              Navigator.pop(context);
-                              GlobalValues.flagTask.value = !GlobalValues.flagTask.value;
-                            });
-                          }, child: Text('Si')),
-                          TextButton(
-                            onPressed:()=>Navigator.pop(context), 
-                            child: Text('No')
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                icon: Icon(Icons.delete)
-              )
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Mensaje del sistema'),
+                          content: Text('¿Deseas borrar la tarea?'),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  agendaDB!
+                                      .DELETE('tblTareas', taskModel.idTask!)
+                                      .then((value) {
+                                    Navigator.pop(context);
+                                    GlobalValues.flagTask.value =
+                                        !GlobalValues.flagTask.value;
+                                  });
+                                },
+                                child: Text('Si')),
+                            TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('No')),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: Icon(Icons.delete))
             ],
           )
         ],
