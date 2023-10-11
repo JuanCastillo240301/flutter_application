@@ -1,9 +1,9 @@
-
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/assets/global_values.dart';
 import 'package:flutter_application_3/screens/movie_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -29,22 +29,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Drawer(
       child: ListView(
         children: [
-           UserAccountsDrawerHeader(
+          UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
               backgroundImage: AssetImage('assets/giphy.gif'),
             ),
-            accountName: Text('JUAN',style: Theme.of(context).textTheme.headline6,),
-            accountEmail: Text('JUAN@gmail.com',style: Theme.of(context).textTheme.headline6,),
+            accountName: Text(
+              'JUAN',
+              style: Theme.of(context).textTheme.headline6,
+            ),
+            accountEmail: Text(
+              'JUAN@gmail.com',
+              style: Theme.of(context).textTheme.headline6,
+            ),
           ),
           ListTile(
-            leading:  SizedBox(
-            width: 50.0, // Ancho deseado
-            height: 50.0, // Alto deseado
-            child: Image.asset('assets/flcl1.jpg'),
-          ),
+            leading: SizedBox(
+              width: 50.0, // Ancho deseado
+              height: 50.0, // Alto deseado
+              child: Image.asset('assets/flcl1.jpg'),
+            ),
             trailing: const Icon(Icons.chevron_right),
-            title:  const Text('FLCL BD 4K', style: TextStyle(color: Colors.black, fontSize: 19.0)),
-            subtitle:  Text('dvd series',style: TextStyle(color: Colors.black,fontSize: 20.0), ),
+            title: const Text('FLCL BD 4K',
+                style: TextStyle(color: Colors.black, fontSize: 19.0)),
+            subtitle: Text(
+              'dvd series',
+              style: TextStyle(color: Colors.black, fontSize: 20.0),
+            ),
             onTap: () {
               Navigator.push(
                 context,
@@ -54,14 +64,64 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
           ListTile(
             leading: SizedBox(
-            width: 50.0, // Ancho deseado
-            height: 50.0, // Alto deseado
-            child: Image.asset('assets/ToDo.png'),
-          ),
+              width: 50.0, // Ancho deseado
+              height: 50.0, // Alto deseado
+              child: Image.asset(
+                'assets/icon4.png',
+                height: 50,
+              ),
+            ),
             trailing: const Icon(Icons.chevron_right),
-            title:  Text('TASK MANAGER',style: TextStyle(color: Colors.black,fontSize: 19.0),),
-            subtitle:  Text('Lista de tareas',style: TextStyle(color: Colors.black,fontSize: 18.0), ),
+            title: Text(
+              'Popular Movies',
+              style: TextStyle(color: Colors.black, fontSize: 19.0),
+            ),
+            subtitle: Text(
+              'Lista de peliculas',
+              style: TextStyle(color: Colors.black, fontSize: 18.0),
+            ),
             onTap: () {
+              Navigator.pushNamed(context, '/popular');
+              // Navigator.pushNamed(context, '/task');
+            },
+          ),
+          ListTile(
+            leading: SizedBox(
+              width: 50.0, // Ancho deseado
+              height: 50.0, // Alto deseado
+              child: Image.asset('assets/ToDo.png'),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            title: Text(
+              'TASK MANAGER',
+              style: TextStyle(color: Colors.black, fontSize: 19.0),
+            ),
+            subtitle: Text(
+              'Lista de tareas',
+              style: TextStyle(color: Colors.black, fontSize: 18.0),
+            ),
+            onTap: () {
+              //Navigator.pushNamed(context, '/popular');
+              Navigator.pushNamed(context, '/task');
+            },
+          ),
+          ListTile(
+            leading: SizedBox(
+              width: 50.0, // Ancho deseado
+              height: 50.0, // Alto deseado
+              child: Image.asset('assets/ToDo.png'),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            title: Text(
+              'School Managment',
+              style: TextStyle(color: Colors.black, fontSize: 19.0),
+            ),
+            subtitle: Text(
+              'Lista de tareas',
+              style: TextStyle(color: Colors.black, fontSize: 18.0),
+            ),
+            onTap: () {
+              //Navigator.pushNamed(context, '/popular');
               Navigator.pushNamed(context, '/task');
             },
           ),
@@ -71,7 +131,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               isDarkModeEnabled: GlobalValues.flagTheme.value,
               onStateChanged: (isDarkModeEnabled) async {
                 GlobalValues.flagTheme.value = isDarkModeEnabled;
-          
+
                 // Guarda el estado del tema en SharedPreferences
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
@@ -80,10 +140,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 100.0, vertical: 200),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 100.0, vertical: 200),
             child: ElevatedButton(
               style: ButtonStyle(
-                minimumSize: MaterialStateProperty.all(Size(100.0, 30)), // Ancho máximo del botón
+                minimumSize: MaterialStateProperty.all(
+                    Size(100.0, 30)), // Ancho máximo del botón
               ),
               onPressed: () async {
                 // Limpiar el estado de "Recuérdame"
