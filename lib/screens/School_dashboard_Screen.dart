@@ -4,20 +4,20 @@ import 'package:flutter_application_3/assets/global_values.dart';
 import 'package:flutter_application_3/screens/movie_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+class SchoolDashboardScreen extends StatefulWidget {
+  const SchoolDashboardScreen({Key? key}) : super(key: key);
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<SchoolDashboardScreen> createState() => _SchoolDashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _SchoolDashboardScreenState extends State<SchoolDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Bienvenido :)',
+          'School Management',
           style: Theme.of(context).textTheme.headline6,
         ),
       ),
@@ -46,20 +46,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
             leading: SizedBox(
               width: 50.0, // Ancho deseado
               height: 50.0, // Alto deseado
-              child: Image.asset('assets/flcl1.jpg'),
+              child: Image.asset('assets/IconCarrera.png'),
             ),
             trailing: const Icon(Icons.chevron_right),
-            title: const Text('FLCL BD 4K',
+            title: const Text('CARRERA',
                 style: TextStyle(color: Colors.black, fontSize: 19.0)),
             subtitle: Text(
-              'dvd series',
+              'Administracion de Carreras',
               style: TextStyle(color: Colors.black, fontSize: 20.0),
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => movieDetails()),
-              );
+            onTap: () { 
+              Navigator.pushNamed(context, '/carrera');
             },
           ),
           ListTile(
@@ -67,59 +64,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: 50.0, // Ancho deseado
               height: 50.0, // Alto deseado
               child: Image.asset(
-                'assets/icon4.png',
+                'assets/IconMaestro.png',
                 height: 50,
               ),
             ),
             trailing: const Icon(Icons.chevron_right),
             title: Text(
-              'Popular Movies',
+              'MAESTRO',
               style: TextStyle(color: Colors.black, fontSize: 19.0),
             ),
             subtitle: Text(
-              'Lista de peliculas',
+              'Administracion de Maestros',
               style: TextStyle(color: Colors.black, fontSize: 18.0),
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/popular');
+             // Navigator.pushNamed(context, '/popular');
+             
             },
           ),
           ListTile(
             leading: SizedBox(
               width: 50.0, // Ancho deseado
               height: 50.0, // Alto deseado
-              child: Image.asset('assets/ToDo.png'),
+              child: Image.asset('assets/IconHomeworks.png'),
             ),
             trailing: const Icon(Icons.chevron_right),
             title: Text(
-              'TASK MANAGER',
+              'TAREA',
               style: TextStyle(color: Colors.black, fontSize: 19.0),
             ),
             subtitle: Text(
-              'Lista de tareas',
+              'Adminitracion de Tareas',
               style: TextStyle(color: Colors.black, fontSize: 18.0),
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/task');
-            },
-          ),
-          ListTile(
-            leading: SizedBox(
-              width: 50.0, // Ancho deseado
-              height: 50.0, // Alto deseado
-              child: Image.asset('assets/ToDo.png'),
-            ),
-            trailing: const Icon(Icons.chevron_right),
-            title: Text(
-              'School Management',
-              style: TextStyle(color: Colors.black, fontSize: 19.0),
-            ),
-            subtitle: Text(
-              'Lista de tareas',
-              style: TextStyle(color: Colors.black, fontSize: 18.0),
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, '/School');
+             // Navigator.pushNamed(context, '/task');
             },
           ),
           Padding(
@@ -145,15 +124,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Size(100.0, 30)), // Ancho máximo del botón
               ),
               onPressed: () async {
-                // Limpiar el estado de "Recuérdame"
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-
-                //await prefs.remove('rememberMe');
-
-                // Redirigir al LoginPage
-                Navigator.pushReplacementNamed(context, '/loginpage');
-              },
-              child: Text('Logout'),
+               Navigator.pushNamed(context, '/dash');
+                },
+              child: Text('EXIT'),
             ),
           )
         ],
