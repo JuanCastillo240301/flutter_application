@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/assets/global_values.dart';
 import 'package:flutter_application_3/assets/styles_app.dart';
+import 'package:flutter_application_3/provider/test_Provider.dart';
 import 'package:flutter_application_3/routes.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -13,7 +15,7 @@ void main() async {
 
   // Recupera el estado del tema
   bool isDarkModeEnabled = prefs.getBool('isDarkModeEnabled') ?? false;
-  
+
   // Recupera el estado de "Recuérdame"
   bool rememberMe = prefs.getBool('rememberMe') ?? false;
 
@@ -37,11 +39,16 @@ class MyApp extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: GlobalValues.flagTheme,
       builder: (context, value, _) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          initialRoute: rememberMe ? '/dash' : '/loginpage',
-          routes: getroutes(),
-          theme: value ? stylesApp.darkTheme(context) : stylesApp.lightTheme(context),
+        return ChangeNotifierProvider(
+          create: (context) => TestProvider(),
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            initialRoute: rememberMe ? '/dash' : '/loginpage',
+            routes: getroutes(),
+            theme: value
+                ? stylesApp.darkTheme(context)
+                : stylesApp.lightTheme(context),
+          ),
         );
       },
     );

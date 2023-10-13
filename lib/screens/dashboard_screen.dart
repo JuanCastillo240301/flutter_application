@@ -122,6 +122,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Navigator.pushNamed(context, '/School');
             },
           ),
+          ListTile(
+            leading: SizedBox(
+              width: 50.0, // Ancho deseado
+              height: 50.0, // Alto deseado
+              child: Image.asset('assets/ToDo.png'),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            title: Text(
+              'Provider',
+              style: TextStyle(color: Colors.black, fontSize: 19.0),
+            ),
+            subtitle: Text(
+              'Provider',
+              style: TextStyle(color: Colors.black, fontSize: 18.0),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/testP');
+            },
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 80.0),
             child: DayNightSwitcher(

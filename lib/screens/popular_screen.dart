@@ -39,7 +39,7 @@ class _PopularScreenState extends State<PopularScreen> {
               ),
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                return itemMoviewidget(snapshot.data![index]);
+                return itemMoviewidget(snapshot.data![index], context);
               },
             );
           } else {
