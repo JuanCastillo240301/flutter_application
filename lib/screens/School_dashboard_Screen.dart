@@ -55,7 +55,7 @@ class _SchoolDashboardScreenState extends State<SchoolDashboardScreen> {
               'Administracion de Carreras',
               style: TextStyle(color: Colors.black, fontSize: 20.0),
             ),
-            onTap: () { 
+            onTap: () {
               Navigator.pushNamed(context, '/carrera');
             },
           ),
@@ -78,8 +78,7 @@ class _SchoolDashboardScreenState extends State<SchoolDashboardScreen> {
               style: TextStyle(color: Colors.black, fontSize: 18.0),
             ),
             onTap: () {
-             // Navigator.pushNamed(context, '/popular');
-             
+              Navigator.pushNamed(context, '/profesor');
             },
           ),
           ListTile(
@@ -98,7 +97,7 @@ class _SchoolDashboardScreenState extends State<SchoolDashboardScreen> {
               style: TextStyle(color: Colors.black, fontSize: 18.0),
             ),
             onTap: () {
-             // Navigator.pushNamed(context, '/task');
+              Navigator.pushNamed(context, '/tarea');
             },
           ),
           Padding(
@@ -124,8 +123,8 @@ class _SchoolDashboardScreenState extends State<SchoolDashboardScreen> {
                     Size(100.0, 30)), // Ancho máximo del botón
               ),
               onPressed: () async {
-               Navigator.pushNamed(context, '/dash');
-                },
+                Navigator.pushNamed(context, '/dash');
+              },
               child: Text('EXIT'),
             ),
           )

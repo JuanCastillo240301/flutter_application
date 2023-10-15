@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/assets/global_values.dart';
 import 'package:flutter_application_3/assets/models/Carrera_model.dart';
+import 'package:flutter_application_3/assets/models/Profesor_model.dart';
 import 'package:flutter_application_3/database/schooldb.dart';
 
 class AddCarrera extends StatefulWidget {
@@ -34,19 +35,15 @@ class _AddCarreraState extends State<AddCarrera> {
       controller: txtConnomCarrera,
     );
 
-
     final space = SizedBox(
       height: 10,
     );
 
-
-
     final ElevatedButton btnGuardar = ElevatedButton(
         onPressed: () {
           if (widget.carreraModel == null) {
-            schoolDB!.INSERT_Carrera('tblCarrera', {
-              'nomCarrera': txtConnomCarrera.text
-            }).then((value) {
+            schoolDB!.INSERT_Carrera('tblCarrera',
+                {'nomCarrera': txtConnomCarrera.text}).then((value) {
               GlobalValues.flagCarrera.value = !GlobalValues.flagCarrera.value;
               var msj = (value > 0)
                   ? 'La inserción fue exitosa!'
@@ -58,9 +55,9 @@ class _AddCarreraState extends State<AddCarrera> {
           } else {
             schoolDB!.UPDATE_Carrera('tblCarrera', {
               'idCarrera': widget.carreraModel!.idCarrera,
-                'nomCarrera': txtConnomCarrera.text
+              'nomCarrera': txtConnomCarrera.text
             }).then((value) {
-               GlobalValues.flagCarrera.value = !GlobalValues.flagCarrera.value;
+              GlobalValues.flagCarrera.value = !GlobalValues.flagCarrera.value;
               var msj = (value > 0)
                   ? 'La actualización fue exitosa fue exitosa!'
                   : 'Ocurrió un error';
@@ -74,18 +71,15 @@ class _AddCarreraState extends State<AddCarrera> {
 
     return Scaffold(
       appBar: AppBar(
-        title:
-            widget.carreraModel == null ? Text('Add Carrera') : Text('Update Carrera'),
+        title: widget.carreraModel == null
+            ? Text('Add Carrera')
+            : Text('Update Carrera'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            txtNameCarrera,
-            space,
-            btnGuardar
-          ],
+          children: [txtNameCarrera, space, btnGuardar],
         ),
       ),
     );
