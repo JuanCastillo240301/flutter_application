@@ -140,7 +140,7 @@ class _AddTareaState extends State<AddTarea> {
             }).then((value) {
               GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
               var msj = (value > 0)
-                  ? 'La inserción fue exitosa!'
+                  ? 'La Tarea esta proxima a vencerse!'
                   : 'Ocurrió un error';
               var snackbar = SnackBar(content: Text(msj));
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -158,7 +158,7 @@ class _AddTareaState extends State<AddTarea> {
             }).then((value) {
               GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
               var msj = (value > 0)
-                  ? 'La actualización fue exitosa fue exitosa!'
+                  ? 'La Tarea esta proxima a vencerse!'
                   : 'Ocurrió un error';
               var snackbar = SnackBar(content: Text(msj));
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
