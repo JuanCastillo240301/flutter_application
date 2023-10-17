@@ -16,15 +16,18 @@ class TareaScreen extends StatefulWidget {
 }
 
 class _TareaScreenState extends State<TareaScreen> {
+  
   TextEditingController _searchController = TextEditingController();
   SchoolDB? schoolDB;
   String _selectedEstado = 'Todas';
-  List<TareaModel> _tasks = [];
 
   @override
   void initState() {
     super.initState();
+    GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
     schoolDB = SchoolDB();
+    _selectedEstado = 'Todas';
+    updateTaskList();
   }
 
   @override
@@ -45,7 +48,7 @@ class _TareaScreenState extends State<TareaScreen> {
               setState(() {
                 _selectedEstado = newValue!;
                 // Llamar a la función para actualizar la lista de tareas
-                _updateTaskList();
+                updateTaskList();
                 GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
               });
             },
@@ -58,11 +61,13 @@ class _TareaScreenState extends State<TareaScreen> {
             }).toList(),
           ),
           IconButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, '/add_Tarea').then((value) {
-                    setState(() {});
-                  }),
-              icon: Icon(Icons.task))
+            onPressed: () async {
+              await Navigator.pushNamed(context, '/add_Tarea');
+              // Llamar a updateTaskList después de agregar una tarea
+              updateTaskList();
+            },
+            icon: Icon(Icons.task),
+          )
         ],
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
@@ -80,10 +85,19 @@ class _TareaScreenState extends State<TareaScreen> {
       body: ValueListenableBuilder(
         valueListenable: GlobalValues.flagTarea,
         builder: (context, value, _) {
-          return FutureBuilder(
-            future: _searchController.text.isEmpty
-                ? schoolDB!.GETALLTASK3()
-                : schoolDB!.GET_TareaByName(_searchController.text),
+          return FutureBuilder<List<TareaModel>>(
+           future: () {
+  if (_searchController.text.isEmpty && _selectedEstado == 'Todas') {
+    return schoolDB!.GETALLTASK3();
+  } else if (_searchController.text.isEmpty && _selectedEstado != 'Todas') {
+    return schoolDB!.GET_TareaByEstado(_selectedEstado);
+  } else if (_searchController.text.isNotEmpty && _selectedEstado != 'Todas') {
+    return schoolDB!.GET_TareaByNameandEstado(_searchController.text, _selectedEstado);
+  }
+  // En caso de que ninguna de las condiciones anteriores se cumpla, puedes retornar null o un futuro que no haga nada
+ // return Future.value(null);
+}()
+,
             builder: (BuildContext context,
                 AsyncSnapshot<List<TareaModel>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -96,10 +110,10 @@ class _TareaScreenState extends State<TareaScreen> {
                 );
               } else if (snapshot.hasData) {
                 return ListView.builder(
-                  itemCount: _tasks.length,
+                  itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, int index) {
                     return CardTareaWidget(
-                      tareaModel: _tasks[index],
+                      tareaModel: snapshot.data![index],
                       schoolDB: schoolDB,
                     );
                   },
@@ -117,19 +131,18 @@ class _TareaScreenState extends State<TareaScreen> {
     );
   }
 
-  Future<void> _updateTaskList() async {
-    List<TareaModel> tasks;
+  Future<void> updateTaskList() async {
+    List<TareaModel> tasks = [];
+
     if (_selectedEstado == 'Todas') {
       tasks = await schoolDB!.GETALLTASK3();
-      GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
     } else {
       tasks = await schoolDB!.GET_TareaByEstado(_selectedEstado);
-      GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
     }
 
     setState(() {
       // Actualizar la lista de tareas
-      _tasks = tasks;
+      tasks = tasks;
     });
   }
 }

@@ -139,10 +139,23 @@ class SchoolDB {
 //
 //
 
+
+
   Future<int> INSERT_Tarea(String tblName, Map<String, dynamic> data) async {
     var conexion = await database;
     return conexion!.insert(tblName, data);
   }
+
+ Future<int> updateTareaCompletion(int idTarea, bool isCompleted) async {
+    var conexion = await database;
+    return await conexion!.update(
+      'tblTarea',
+      {'nomRealizada': isCompleted ? 'Completado' : 'Pendiente'},
+      where: 'idTarea = ?',
+      whereArgs: [idTarea],
+    );
+  }
+
 
   Future<int> UPDATE_Tarea(String tblName, Map<String, dynamic> data) async {
     var conexion = await database;
@@ -176,11 +189,36 @@ class SchoolDB {
     return result.map((task) => TareaModel.fromMap(task)).toList();
   }
 
+  Future<List<TareaModel>> GET_TareaByNameandEstado(String name, String Estado) async {
+  var conexion = await database;
+  var result = await conexion!.query('tblTarea', where: 'nomTarea = ? AND nomRealizada = ?', whereArgs: [name, Estado]);
+  return result.map((task) => TareaModel.fromMap(task)).toList();
+}
+
+
   Future<List<int>> getProfesorIdsFromDatabase() async {
     var conexion = await database;
     var result = await conexion!.query('tblProfesor', columns: ['idProfesor']);
     return result.map<int>((map) => map['idProfesor'] as int).toList();
   }
+
+Future<String?> getProfesorNameById(int idProfesor) async {
+  var conexion = await database;
+  var result = await conexion!.query(
+    'tblProfesor',
+    columns: ['nomProfesor'],
+    where: 'idProfesor = ?',
+    whereArgs: [idProfesor],
+  );
+
+  if (result.isNotEmpty) {
+    return result.first['nomProfesor'] as String?;
+  }
+
+  return null;
+}
+
+
 
   Future<List<String>> getProfesorNameFromDatabase() async {
     var conexion = await database;

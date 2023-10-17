@@ -5,18 +5,27 @@ import 'package:flutter_application_3/assets/models/Profesor_model.dart';
 import 'package:flutter_application_3/assets/models/Tarea_model.dart';
 import 'package:flutter_application_3/assets/models/Tarea_model.dart';
 import 'package:flutter_application_3/assets/models/Tarea_model.dart';
+import 'package:flutter_application_3/database/Noti.dart';
 import 'package:flutter_application_3/database/schooldb.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 
 class AddTarea extends StatefulWidget {
   AddTarea({super.key, this.tareaModel});
 
-  TareaModel? tareaModel;
 
+  TareaModel? tareaModel;
   @override
   State<AddTarea> createState() => _AddTareaState();
 }
 
 class _AddTareaState extends State<AddTarea> {
+  
+  DateTime? selectedDate1;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  List<TareaModel> _tasks = [];
+  String _selectedEstado = 'Todas';
   int? selectedProfesorId;
   List<int> profesorIds = [];
   String? selectedprofesorname;
@@ -35,16 +44,19 @@ class _AddTareaState extends State<AddTarea> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    
     schoolDB = SchoolDB();
     if (widget.tareaModel != null) {
       txtConnameTarea.text = widget.tareaModel!.nomTarea!;
       desTarea.text = widget.tareaModel!.desTarea!;
-
+      txtFechaExpiracion.text = widget.tareaModel!.fecExpiracion!;
+      txtFechaRecordatorio.text =widget.tareaModel!.fecRecordatorio!;
+      selectedProfesorId =  widget.tareaModel!.idProfesor!;
       switch (widget.tareaModel!.nomRealizada) {
-        case 'P':
+        case 'Pendiente':
           dropDownValue = "Pendiente";
           break;
-        case 'C':
+        case 'Completado':
           dropDownValue = "Completado";
       }
 
@@ -129,7 +141,10 @@ class _AddTareaState extends State<AddTarea> {
 
     final ElevatedButton btnGuardar = ElevatedButton(
         onPressed: () {
+          scheduleNotification('123','123');
+                showNotification(txtConnameTarea.text, 'Tarea Programada');
           if (widget.tareaModel == null) {
+           
             schoolDB!.INSERT_Tarea('tblTarea', {
               'nomTarea': txtConnameTarea.text,
               'fecExpiracion': txtFechaExpiracion.text,
@@ -140,7 +155,7 @@ class _AddTareaState extends State<AddTarea> {
             }).then((value) {
               GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
               var msj = (value > 0)
-                  ? 'La Tarea esta proxima a vencerse!'
+                  ? 'Tarea creada'
                   : 'Ocurrió un error';
               var snackbar = SnackBar(content: Text(msj));
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -158,21 +173,22 @@ class _AddTareaState extends State<AddTarea> {
             }).then((value) {
               GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
               var msj = (value > 0)
-                  ? 'La Tarea esta proxima a vencerse!'
+                  ? 'Tarea Actualizada'
                   : 'Ocurrió un error';
               var snackbar = SnackBar(content: Text(msj));
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
+             
               Navigator.pop(context);
             });
           }
         },
-        child: Text('Save Task'));
+        child: Text('Save Tarea'));
 
     return Scaffold(
       appBar: AppBar(
         title: widget.tareaModel == null
-            ? Text('Add Profesor')
-            : Text('Update Profesor'),
+            ? Text('Add Tarea')
+            : Text('Update Tarea'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -208,23 +224,45 @@ class _AddTareaState extends State<AddTarea> {
 
     if (selectedDate != null && selectedDate != DateTime.now()) {
       setState(() {
-        txtFechaExpiracion.text = selectedDate.toString();
+        String a = selectedDate.toString();
+        var date = DateTime.parse(a);
+        var formattedDate = "${date.day}-${date.month}-${date.year}";
+        txtFechaExpiracion.text = formattedDate.toString();
       });
     }
   }
 
-  Future<void> _selectFechaRecordatorio(BuildContext context) async {
-    DateTime? selectedDate1 = await showDatePicker(
+Future<void> _selectFechaRecordatorio(BuildContext context) async {
+   selectedDate1 = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2101),
+  );
+
+  if (selectedDate1 != null) {
+    TimeOfDay? selectedTime = await showTimePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+      initialTime: TimeOfDay.fromDateTime(DateTime.now()),
     );
 
-    if (selectedDate1 != null && selectedDate1 != DateTime.now()) {
+    if (selectedTime != null) {
+      DateTime selectedDateTime = DateTime(
+        selectedDate1!.year,
+        selectedDate1!.month,
+        selectedDate1!.day,
+        selectedTime.hour,
+        selectedTime.minute,
+      );
+
       setState(() {
-        txtFechaRecordatorio.text = selectedDate1.toString();
+        String formattedDate =
+            "${selectedDateTime.day}-${selectedDateTime.month}-${selectedDateTime.year} ${selectedTime.format(context)}";
+        txtFechaRecordatorio.text = formattedDate;
       });
     }
   }
+}
+
+
 }

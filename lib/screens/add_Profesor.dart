@@ -20,6 +20,8 @@ class _AddProfesorState extends State<AddProfesor> {
   List<String> carreraname = [];
   TextEditingController txtConnomProfesor = TextEditingController();
   TextEditingController txtConemail = TextEditingController();
+  int? dropDownValue;
+  List<String> dropDownValues = [];
 
   SchoolDB? schoolDB;
   @override
@@ -30,7 +32,7 @@ class _AddProfesorState extends State<AddProfesor> {
     if (widget.profesoreModel != null) {
       txtConnomProfesor.text = widget.profesoreModel!.nomProfesor!;
       txtConemail.text = widget.profesoreModel!.email!;
-
+       selectedCarreraId = widget.profesoreModel!.idCarrera!;
       schoolDB!.getCarreraIdsFromDatabase().then((ids) {
         setState(() {
           carreraIds = ids;
@@ -53,6 +55,7 @@ class _AddProfesorState extends State<AddProfesor> {
         carreraname = name;
       });
     });
+
   }
 
   @override

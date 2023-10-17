@@ -3,16 +3,17 @@ import 'package:flutter_application_3/assets/global_values.dart';
 import 'package:flutter_application_3/assets/styles_app.dart';
 import 'package:flutter_application_3/provider/test_Provider.dart';
 import 'package:flutter_application_3/routes.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   // Inicializa SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-
   // Recupera el estado del tema
   bool isDarkModeEnabled = prefs.getBool('isDarkModeEnabled') ?? false;
 
