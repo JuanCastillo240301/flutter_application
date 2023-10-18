@@ -24,7 +24,6 @@ class _TareaScreenState extends State<TareaScreen> {
   @override
   void initState() {
     super.initState();
-    GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
     schoolDB = SchoolDB();
     _selectedEstado = 'Todas';
     updateTaskList();
@@ -99,6 +98,9 @@ class _TareaScreenState extends State<TareaScreen> {
     return schoolDB!.GET_TareaByEstado(_selectedEstado);
   } else if (_searchController.text.isNotEmpty && _selectedEstado != 'Todas') {
     return schoolDB!.GET_TareaByNameandEstado(_searchController.text, _selectedEstado);
+  }
+  else if (_searchController.text.isNotEmpty && _selectedEstado == 'Todas') {
+    return schoolDB!.GET_TareaByName(_searchController.text);
   }
   // En caso de que ninguna de las condiciones anteriores se cumpla, puedes retornar null o un futuro que no haga nada
  // return Future.value(null);

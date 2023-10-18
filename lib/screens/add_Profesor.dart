@@ -115,7 +115,7 @@ class _AddProfesorState extends State<AddProfesor> {
               GlobalValues.flagProfesor.value =
                   !GlobalValues.flagProfesor.value;
               var msj = (value > 0)
-                  ? 'La actualización fue exitosa fue exitosa!'
+                  ? 'La actualización fue exitosa!'
                   : 'Ocurrió un error';
               var snackbar = SnackBar(content: Text(msj));
               ScaffoldMessenger.of(context).showSnackBar(snackbar);

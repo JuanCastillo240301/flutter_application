@@ -59,7 +59,7 @@ class _AddCarreraState extends State<AddCarrera> {
             }).then((value) {
               GlobalValues.flagCarrera.value = !GlobalValues.flagCarrera.value;
               var msj = (value > 0)
-                  ? 'La actualización fue exitosa fue exitosa!'
+                  ? 'La actualización fue exitosa!'
                   : 'Ocurrió un error';
               var snackbar = SnackBar(content: Text(msj));
               ScaffoldMessenger.of(context).showSnackBar(snackbar);

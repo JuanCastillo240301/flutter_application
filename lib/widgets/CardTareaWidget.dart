@@ -60,9 +60,7 @@ class CardTareaWidget extends StatelessWidget {
  
   @override
   Widget  build(BuildContext context ) {
-    Future<String?> a; 
     selectedProfesorId =tareaModel.idProfesor;
-    a=schoolDB!.getProfesorNameById(selectedProfesorId!); 
     return Container (
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.all(10),
@@ -89,7 +87,7 @@ class CardTareaWidget extends StatelessWidget {
                         builder: (context) =>
                             AddTarea(tareaModel: tareaModel))),
                 child: Image.asset(
-                  'assets/IconCarrera.png',
+                  'assets/IconHomeworks.png',
                   height: 50,
                 ),
               ),

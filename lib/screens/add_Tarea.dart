@@ -145,9 +145,10 @@ class _AddTareaState extends State<AddTarea> {
 
     final ElevatedButton btnGuardar = ElevatedButton(
         onPressed: () {
+          String a = txtConnameTarea.text;
            debugPrint('Notification Scheduled for $scheduleTime');
         NotificationService().scheduleNotification(
-            title: 'Scheduled Notification',
+            title: 'La tarea $a esta proxima a vencer',
             body: '$scheduleTime',
             scheduledNotificationDateTime: scheduleTime);
           if (widget.tareaModel == null) {

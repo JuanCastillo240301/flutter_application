@@ -35,7 +35,7 @@ class CardProfesorWidget extends StatelessWidget {
                           builder: (context) =>
                               AddProfesor(profesoreModel: profesorModel))),
                   child: Image.asset(
-                    'assets/IconCarrera.png',
+                    'assets/IconMaestro.png',
                     height: 50,
                   )),
               IconButton(
