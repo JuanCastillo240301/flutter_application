@@ -1,79 +1,59 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-// Instancia del package
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+class NotificationService {
+  final FlutterLocalNotificationsPlugin notificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
-// Método que inicializa el objeto de notificaciones
-Future<void> initNotifications() async {
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('icon_app');
+  Future<void> initNotification() async {
+    AndroidInitializationSettings initializationSettingsAndroid =
+        const AndroidInitializationSettings('icon_app');
 
-  const DarwinInitializationSettings initializationSettingsIOS =
-      DarwinInitializationSettings();
+    var initializationSettingsIOS = DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+        onDidReceiveLocalNotification:
+            (int id, String? title, String? body, String? payload) async {});
 
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-  );
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    await notificationsPlugin.initialize(initializationSettings,
+        onDidReceiveNotificationResponse:
+            (NotificationResponse notificationResponse) async {});
+  }
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  
-}
+  notificationDetails() {
+    return const NotificationDetails(
+        android: AndroidNotificationDetails('channelId', 'channelName',
+            importance: Importance.max),
+        iOS: DarwinNotificationDetails());
+  }
 
-// Método que muestra la notificación
-Future<void> showNotification(String title, String body) async {
-  const AndroidNotificationDetails androidNotificationDetails =
-  AndroidNotificationDetails(
-    'IDRecor',
-    'Recordatorio',
-    importance: Importance.max,
-    priority: Priority.high,
-    icon: 'icon_app'
-  );
+  Future showNotification(
+      {int id = 0, String? title, String? body, String? payLoad}) async {
+    return notificationsPlugin.show(
+        id, title, body, await notificationDetails());
+  }
 
-  const NotificationDetails notificationDetails = NotificationDetails(
-    android: androidNotificationDetails,
-  );
-
-  // try {
-    await flutterLocalNotificationsPlugin.show(
-      1,
-      title.isEmpty ? "Tarea" : title,
-      body.isEmpty ? "Recordatorio progrado." : body,
-      notificationDetails,
-    );
-  // ignore: empty_catches
-  // } catch (e) {
-    
-  // }
-}
-
-// Método para programar una notificación en una fecha específica
-   Future<void> scheduleNotification(
-      String? title, String? body) async {
-    try {
-      final AndroidNotificationDetails androidNotificationDetails =
-          AndroidNotificationDetails(
-        'IDRecor',
-        'Recordatorio',
-        importance: Importance.max,
-        priority: Priority.high,
-      );
-
-      final NotificationDetails notificationDetails =
-          NotificationDetails(android: androidNotificationDetails);
-
-      // Programar la notificación en la fecha especificada
-      await flutterLocalNotificationsPlugin.periodicallyShow(
-        1,
+  Future scheduleNotification(
+      {int id = 0,
+      String? title,
+      String? body,
+      String? payLoad,
+      required DateTime scheduledNotificationDateTime}) async {
+    return notificationsPlugin.zonedSchedule(
+        id,
         title,
         body,
-        RepeatInterval.everyMinute,
-        notificationDetails,
-      );
-    } catch (e) {
-      print('Error al programar la notificación: $e');
-    }
+        tz.TZDateTime.from(
+          scheduledNotificationDateTime,
+          tz.local,
+        ),
+        await notificationDetails(),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
+}

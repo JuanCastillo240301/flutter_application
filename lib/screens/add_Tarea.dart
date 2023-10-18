@@ -6,9 +6,13 @@ import 'package:flutter_application_3/assets/models/Tarea_model.dart';
 import 'package:flutter_application_3/assets/models/Tarea_model.dart';
 import 'package:flutter_application_3/assets/models/Tarea_model.dart';
 import 'package:flutter_application_3/database/Noti.dart';
+//import 'package:flutter_application_3/database/Noti.dart';
 import 'package:flutter_application_3/database/schooldb.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+//import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
+//import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+DateTime scheduleTime = DateTime.now();
 
 class AddTarea extends StatefulWidget {
   AddTarea({super.key, this.tareaModel});
@@ -22,8 +26,6 @@ class AddTarea extends StatefulWidget {
 class _AddTareaState extends State<AddTarea> {
   
   DateTime? selectedDate1;
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
   List<TareaModel> _tasks = [];
   String _selectedEstado = 'Todas';
   int? selectedProfesorId;
@@ -44,7 +46,7 @@ class _AddTareaState extends State<AddTarea> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    
+    NotificationService().initNotification();
     schoolDB = SchoolDB();
     if (widget.tareaModel != null) {
       txtConnameTarea.text = widget.tareaModel!.nomTarea!;
@@ -87,6 +89,7 @@ class _AddTareaState extends State<AddTarea> {
 
   @override
   Widget build(BuildContext context) {
+    final String title;
     final txtFecha1 = TextFormField(
       decoration: const InputDecoration(
           label: Text('Fecha de Expiración'), border: OutlineInputBorder()),
@@ -141,8 +144,11 @@ class _AddTareaState extends State<AddTarea> {
 
     final ElevatedButton btnGuardar = ElevatedButton(
         onPressed: () {
-          scheduleNotification('123','123');
-                showNotification(txtConnameTarea.text, 'Tarea Programada');
+           debugPrint('Notification Scheduled for $scheduleTime');
+        NotificationService().scheduleNotification(
+            title: 'Scheduled Notification',
+            body: '$scheduleTime',
+            scheduledNotificationDateTime: scheduleTime);
           if (widget.tareaModel == null) {
            
             schoolDB!.INSERT_Tarea('tblTarea', {
@@ -202,6 +208,7 @@ class _AddTareaState extends State<AddTarea> {
             txtFecha1,
             space,
             txtFecha2,
+            
             space,
             dropdownCarrera,
             space,
@@ -215,54 +222,87 @@ class _AddTareaState extends State<AddTarea> {
   }
 
   Future<void> _selectFechaExpiracion(BuildContext context) async {
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-
-    if (selectedDate != null && selectedDate != DateTime.now()) {
-      setState(() {
-        String a = selectedDate.toString();
-        var date = DateTime.parse(a);
-        var formattedDate = "${date.day}-${date.month}-${date.year}";
-        txtFechaExpiracion.text = formattedDate.toString();
-      });
-    }
-  }
-
-Future<void> _selectFechaRecordatorio(BuildContext context) async {
-   selectedDate1 = await showDatePicker(
-    context: context,
-    initialDate: DateTime.now(),
-    firstDate: DateTime(2000),
-    lastDate: DateTime(2101),
-  );
-
-  if (selectedDate1 != null) {
-    TimeOfDay? selectedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(DateTime.now()),
-    );
-
-    if (selectedTime != null) {
-      DateTime selectedDateTime = DateTime(
-        selectedDate1!.year,
-        selectedDate1!.month,
-        selectedDate1!.day,
-        selectedTime.hour,
-        selectedTime.minute,
-      );
+        await DatePicker.showDateTimePicker(
+          context,
+          showTitleActions: true,
+          onChanged: (date) => scheduleTime = date,
+          onConfirm: (date) {},
+        );
 
       setState(() {
         String formattedDate =
-            "${selectedDateTime.day}-${selectedDateTime.month}-${selectedDateTime.year} ${selectedTime.format(context)}";
+            "${scheduleTime.day}-${scheduleTime.month}-${scheduleTime.year} ${scheduleTime.hour}:${scheduleTime.minute}";
+        txtFechaExpiracion.text = formattedDate;
+      });
+    }
+  
+
+Future<void> _selectFechaRecordatorio(BuildContext context) async {
+     await DatePicker.showDateTimePicker(
+          context,
+          showTitleActions: true,
+          onChanged: (date) => scheduleTime = date,
+          onConfirm: (date) {},
+        );
+
+      setState(() {
+        String formattedDate =
+            "${scheduleTime.day}-${scheduleTime.month}-${scheduleTime.year} ${scheduleTime.hour}:${scheduleTime.minute}";
         txtFechaRecordatorio.text = formattedDate;
       });
     }
-  }
+  
 }
 
 
+
+
+class DatePickerTxt extends StatefulWidget {
+  const DatePickerTxt({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<DatePickerTxt> createState() => _DatePickerTxtState();
+}
+
+class _DatePickerTxtState extends State<DatePickerTxt> {
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        DatePicker.showDateTimePicker(
+          context,
+          showTitleActions: true,
+          onChanged: (date) => scheduleTime = date,
+          onConfirm: (date) {},
+        );
+          
+      },
+      child: const Text(
+        'Selecciona la fecha y hora del recordatorio',
+        style: TextStyle(color: Colors.red),
+      ),
+    );
+  }
+}
+
+class ScheduleBtn extends StatelessWidget {
+  const ScheduleBtn({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      child: const Text('Schedule notifications'),
+      onPressed: () {
+        debugPrint('Notification Scheduled for $scheduleTime');
+        NotificationService().scheduleNotification(
+            title: 'Scheduled Notification',
+            body: '$scheduleTime',
+            scheduledNotificationDateTime: scheduleTime);
+      },
+    );
+  }
 }
