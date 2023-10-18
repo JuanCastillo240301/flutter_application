@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_application_3/assets/global_values.dart';
 import 'package:flutter_application_3/assets/models/Carrera_model.dart';
 import 'package:flutter_application_3/assets/models/Profesor_model.dart';
@@ -221,20 +222,21 @@ class _AddTareaState extends State<AddTarea> {
     );
   }
 
-  Future<void> _selectFechaExpiracion(BuildContext context) async {
-        await DatePicker.showDateTimePicker(
-          context,
-          showTitleActions: true,
-          onChanged: (date) => scheduleTime = date,
-          onConfirm: (date) {},
-        );
+ Future<void> _selectFechaExpiracion(BuildContext context) async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
 
+    if (selectedDate != null && selectedDate != DateTime.now()) {
       setState(() {
-        String formattedDate =
-            "${scheduleTime.day}-${scheduleTime.month}-${scheduleTime.year} ${scheduleTime.hour}:${scheduleTime.minute}";
+        String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
         txtFechaExpiracion.text = formattedDate;
       });
     }
+  }
   
 
 Future<void> _selectFechaRecordatorio(BuildContext context) async {
@@ -246,8 +248,7 @@ Future<void> _selectFechaRecordatorio(BuildContext context) async {
         );
 
       setState(() {
-        String formattedDate =
-            "${scheduleTime.day}-${scheduleTime.month}-${scheduleTime.year} ${scheduleTime.hour}:${scheduleTime.minute}";
+        String formattedDate = DateFormat('yyyy-MM-dd').format(scheduleTime);
         txtFechaRecordatorio.text = formattedDate;
       });
     }

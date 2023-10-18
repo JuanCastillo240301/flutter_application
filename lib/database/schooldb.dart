@@ -182,6 +182,29 @@ class SchoolDB {
     return result.map((task) => TareaModel.fromMap(task)).toList();
   }
 
+  Future<List<TareaModel>> GET_TareaByFecExpiracion(String fecExpiracion) async {
+  var conexion = await database;
+  var result = await conexion!
+      .query('tblTarea', where: 'fecExpiracion = ?', whereArgs: [fecExpiracion]);
+  return result.map((task) => TareaModel.fromMap(task)).toList();
+  }
+
+    Future<List<TareaModel>> getTaskByDate(String date) async {
+    var connection = await database;
+    var result = await connection!.query('tblTarea',
+      where: 'fecExpiracion = ?',
+      whereArgs: [date],
+    );
+      return result.map((task) => TareaModel.fromMap(task)).toList();
+  }
+
+  Future<List<TareaModel>> getTaskData() async {
+    var connection = await database;
+    var result = await connection!.query('tblTarea');
+
+    return result.map((task) => TareaModel.fromMap(task)).toList();
+  }
+
   Future<List<TareaModel>> GET_TareaByEstado(String Estado) async {
     var conexion = await database;
     var result = await conexion!
