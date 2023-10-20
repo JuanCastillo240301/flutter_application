@@ -18,6 +18,30 @@ import 'package:flutter_application_3/widgets/HeartCheckbox.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 
+
+class Actor {
+  final int id;
+  final String name;
+  final String character;
+  final String profilePath;
+
+  Actor({
+    required this.id,
+    required this.name,
+    required this.character,
+    required this.profilePath,
+  });
+
+  factory Actor.fromJson(Map<String, dynamic> json) {
+    return Actor(
+      id: json['id'],
+      name: json['name'],
+      character: json['character'],
+      profilePath: json['profile_path'],
+    );
+  }
+}
+
 class DetailMovieScreen extends StatefulWidget {
   const DetailMovieScreen({super.key});
 
@@ -69,6 +93,28 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
     return '';
   }
 
+Future<List<Actor>> fetchMovieActors(int movieId) async {
+  final apiKey = '4403bdcf59ccea40c627f74de397e6a0'; // Reemplaza con tu clave de API de TMDb
+  final language = 'es-MX';
+
+  final response = await http.get(
+    Uri.parse('https://api.themoviedb.org/3/movie/$movieId/credits?api_key=$apiKey&language=$language'),
+  );
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    final cast = data['cast'] as List;
+    final filteredActors = cast
+        .where((actorData) => actorData['known_for_department'] == 'Acting')
+        .take(10) // Muestra solo los primeros 10 actores
+        .map((actorData) => Actor.fromJson(actorData))
+        .toList();
+    return filteredActors;
+  } else {
+    throw Exception('Failed to load movie credits');
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     final movie = ModalRoute.of(context)!.settings.arguments as PopularModel;
@@ -86,33 +132,153 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
       });
     });
     Widget? videoPlayer;
-try {
-  if (_controller.initialVideoId != '') {
-  videoPlayer = YoutubePlayer(
-    controller: _controller,
-    actionsPadding: const EdgeInsets.only(left: 16.0),
-    bottomActions: [
-      CurrentPosition(),
-      const SizedBox(width: 10.0),
-      ProgressBar(isExpanded: true),
-      const SizedBox(width: 10.0),
-      RemainingDuration(),
-    ],
-  );
-  }else{
-     videoPlayer =  Text(
-                                'Trailer de la Pelicula no disponible',
-                                style: TextStyle(
-                                  fontSize: 35.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+    Widget? List1;
+
+ try {
+List1 = Container( // Espacio entre actores
+    decoration: BoxDecoration(
+      shape: BoxShape.rectangle, // Forma de círculo
+      border: Border.all(
+        color: Colors.red, // Color del contorno
+        width: 5.0, // Ancho del contorno
+      ),
+      ),
+  child:   Padding(
+    padding: EdgeInsets.all(0),
+    child: FutureBuilder<List<Actor>>(
+    
+      future: fetchMovieActors(movie.id),
+    
+      builder: (context, snapshot) {
+    
+        final actors = snapshot.data ?? [];
+        if (actors.length ==10){
+        return SingleChildScrollView(
+    
+          scrollDirection: Axis.horizontal,
+    
+          child: Padding(
+            padding: EdgeInsets.all(2.0),
+            child: Row(
+            
+              children: actors.map((actor) {
+            
+                return Padding(
+                  padding: EdgeInsets.only(right: 5.0,left:5.0),
+                  child: Column(
+                            
+                    children: <Widget>[
+                            
+                      Container(    decoration: BoxDecoration(
+      shape: BoxShape.circle, // Forma de círculo
+      border: Border.all(
+        color: Colors.red, // Color del contorno
+        width: 2.0, // Ancho del contorno
+      ),
+      ),
+                        child: ClipOval(
+                              
+                                child: Image.network(
+                              
+                                        'https://image.tmdb.org/t/p/w500${actor.profilePath}',
+                              
+                                        width: 75,
+                              
+                                        height: 75,
+                              
+                                        fit: BoxFit.cover,
+                              
                                 ),
-                                textAlign: TextAlign.center,
-                              );
-  }
-} catch (e) {
-  videoPlayer = Text('Ocurrió un error al cargar el reproductor de video.');
-}
+                              
+                              ),
+                      ),
+                            
+                      Text(
+                            
+                        actor.name,
+                            
+                        style: TextStyle(
+                            
+                          fontSize: 12.0,
+                            
+                          fontWeight: FontWeight.bold,
+                            
+                          color: Colors.black,
+                            
+                        ),
+                            
+                      ),
+                            
+                      Text(
+                            
+                        actor.character,
+                            
+                        style: TextStyle(
+                            
+                          fontSize: 10.0,
+                            
+                          color: Colors.black,
+                            
+                        ),
+                            
+                      ),
+                            
+                    ],
+                            
+                  ),
+                );
+            
+              }).toList(),
+            
+            ),
+          ),
+    
+        );
+    }else if (actors.length <10){
+      return
+      CircularProgressIndicator();
+    }else{
+      return
+       CircularProgressIndicator();
+    }
+      },
+    
+    ),
+  ),
+);
+    } catch (e) {
+      List1 = Text('Ocurrió un error al cargar el reproductor de video.');
+    }
+
+    try {
+      if (_controller.initialVideoId != '') {
+        videoPlayer = YoutubePlayer(
+          controller: _controller,
+          actionsPadding: const EdgeInsets.only(left: 16.0),
+          bottomActions: [
+            CurrentPosition(),
+            const SizedBox(width: 10.0),
+            ProgressBar(isExpanded: true),
+            const SizedBox(width: 10.0),
+            RemainingDuration(),
+          ],
+        );
+      } else {
+        videoPlayer = Text(
+          'Trailer de la Pelicula no disponible :(',
+          style: TextStyle(
+            fontSize: 35.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          textAlign: TextAlign.center,
+        );
+      }
+    } catch (e) {
+      videoPlayer = Text('Ocurrió un error al cargar el reproductor de video.');
+    }
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -170,8 +336,8 @@ try {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(50.0),
                       ),
-                      //height: 600,
                       width: 500,
+                      //height: 1000,
                       child: Align(
                         alignment: Alignment.bottomLeft,
                         child: Padding(
@@ -222,6 +388,18 @@ try {
                                 },
                                 tapOnlyMode: true,
                               ),
+                              SizedBox(height: 10.0),
+                              Text(
+                                'Actors',
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.justify,
+                              ),
+                              SizedBox(height: 10.0),
+                              List1,
                             ],
                           ),
                         ),
