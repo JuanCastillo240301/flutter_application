@@ -1,3 +1,4 @@
+
 import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -247,7 +248,7 @@ List1 = Container( // Espacio entre actores
   ),
 );
     } catch (e) {
-      List1 = Text('Ocurrió un error al cargar el reproductor de video.');
+      List1 = Text('');
     }
 
     try {
@@ -275,7 +276,7 @@ List1 = Container( // Espacio entre actores
         );
       }
     } catch (e) {
-      videoPlayer = Text('Ocurrió un error al cargar el reproductor de video.');
+      videoPlayer = Text('');
     }
 
 
@@ -311,103 +312,107 @@ List1 = Container( // Espacio entre actores
       ),
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage('https://image.tmdb.org/t/p/w500/${movie.posterPath}'),
-            fit: BoxFit.cover,
+      body: Hero(
+        tag: 'moviePoster${movie.id}',
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage('https://image.tmdb.org/t/p/w500/${movie.posterPath}'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: Container(
-            color: Colors.black.withOpacity(0.5),
-            child: ListView(
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    // Mostrar la imagen de la película si lo deseas.
-                    SizedBox(height: 30.0),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                      width: 500,
-                      //height: 1000,
-                      child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              videoPlayer,
-                              SizedBox(height: 20.0),
-                              Text(
-                                movie.title,
-                                style: TextStyle(
-                                  fontSize: 35.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(
+              color: Colors.black.withOpacity(0.5),
+              child: ListView(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      // Mostrar la imagen de la película si lo deseas.
+                      SizedBox(height: 30.0),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        width: 500,
+                        //height: 1000,
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                videoPlayer,
+                                SizedBox(height: 20.0),
+                                Text(
+                                  movie.title,
+                                  style: TextStyle(
+                                    fontSize: 35.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                movie.overview,
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                Text(
+                                  movie.overview,
+                                  style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  textAlign: TextAlign.justify,
                                 ),
-                                textAlign: TextAlign.justify,
-                              ),
-                              SizedBox(height: 10.0),
-                              Text('Original Title: ${movie.id}', style: commonTextStyle),
-                              SizedBox(height: 10.0),
-                              Text('Original Title: ${movie.originalTitle}', style: commonTextStyle),
-                              SizedBox(height: 10.0),
-                              Text('Release Date: ${DateFormat('dd-MM-yyyy').format(movie.releaseDate)}', style: commonTextStyle),
-                              SizedBox(height: 10.0),
-                              Text('Rating: ${movie.voteAverage.ceil()}', style: commonTextStyle),
-                              RatingBar.builder(
-                                initialRating: movie.voteAverage,
-                                minRating: 0.5,
-                                direction: Axis.horizontal,
-                                itemCount: 10,
-                                itemSize: 20,
-                                itemBuilder: (context, _) => Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
+                                SizedBox(height: 10.0),
+                                Text('Movie ID: ${movie.id}', style: commonTextStyle),
+                                SizedBox(height: 10.0),
+                                Text('Original Title: ${movie.originalTitle}', style: commonTextStyle),
+                                SizedBox(height: 10.0),
+                                Text('Release Date: ${DateFormat('dd-MM-yyyy').format(movie.releaseDate)}', style: commonTextStyle),
+                                SizedBox(height: 10.0),
+                                Text('Rating: ${movie.voteAverage.ceil()}', style: commonTextStyle),
+                                RatingBar.builder(
+                                   ignoreGestures: true,
+                                  initialRating: movie.voteAverage,
+                                  minRating: 0.5,
+                                  direction: Axis.horizontal,
+                                  itemCount: 10,
+                                  itemSize: 20,
+                                  itemBuilder: (context, _) => Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    print(rating);
+                                  },
+                                  tapOnlyMode: true,
                                 ),
-                                onRatingUpdate: (rating) {
-                                  print(rating);
-                                },
-                                tapOnlyMode: true,
-                              ),
-                              SizedBox(height: 10.0),
-                              Text(
-                                'Actors',
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                SizedBox(height: 10.0),
+                                Text(
+                                  'Actors',
+                                  style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                  textAlign: TextAlign.justify,
                                 ),
-                                textAlign: TextAlign.justify,
-                              ),
-                              SizedBox(height: 10.0),
-                              List1,
-                            ],
+                                SizedBox(height: 10.0),
+                                List1,
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
