@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           create: (context) => TestProvider(),
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            initialRoute: rememberMe ? '/dash' : '/School',
+            initialRoute: rememberMe ? '/dash' : '/dash',
             routes: getroutes(),
             theme: value
                 ? stylesApp.darkTheme(context)
