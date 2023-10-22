@@ -128,7 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: 50.0, // Ancho deseado
               height: 50.0, // Alto deseado
               child: Image.asset(
-                'assets/favs.png',
+                'assets/estrella.png',
                 height: 50,
               ),
             ),
