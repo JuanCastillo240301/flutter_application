@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/screens/Carrera_screen.dart';
+import 'package:flutter_application_3/screens/Detail_MovieDB_Screen.dart';
 import 'package:flutter_application_3/screens/Detail_Movie_Screen.dart';
+import 'package:flutter_application_3/screens/Favs_Screen.dart';
 import 'package:flutter_application_3/screens/Profesor_screen.dart';
 import 'package:flutter_application_3/screens/School_dashboard_Screen.dart';
 import 'package:flutter_application_3/screens/Tarea_Screen.dart';
@@ -25,6 +27,8 @@ Map<String, WidgetBuilder> getroutes() {
     '/popular': (BuildContext context) => const PopularScreen(),
     '/detailMovie': (BuildContext context) => const DetailMovieScreen(),
     '/testP': (BuildContext context) => const TestProviderScreen(),
+    '/Favs': (BuildContext context) => const FavsScreen(),
+    '/detailMovieDB': (BuildContext context) => const DetailMovieDBScreen(),
     '/School': (BuildContext context) => const SchoolDashboardScreen(),
     '/add_Carrera': (BuildContext context) => AddCarrera(),
     '/carrera': (BuildContext context) => const CarreraScreen(),

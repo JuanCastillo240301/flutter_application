@@ -1,22 +1,20 @@
 import 'dart:ui';
 import 'package:flutter_application_3/assets/global_values.dart';
-import 'package:flutter_application_3/assets/models/task_model.dart';
+import 'package:flutter_application_3/assets/models/Fav_Model.dart';
 import 'package:flutter_application_3/database/agendadb.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/assets/models/popular_model.dart';
+//import 'package:flutter_application_3/assets/models/popular_model.dart';
 import 'dart:math';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/assets/models/popular_model.dart';
 import 'package:flutter_application_3/screens/counter.dart';
 import 'package:flutter_application_3/screens/image_carusel.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/assets/models/popular_model.dart';
 import 'package:flutter_application_3/widgets/HeartCheckbox.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -44,14 +42,14 @@ class Actor {
   }
 }
 
-class DetailMovieScreen extends StatefulWidget {
-  const DetailMovieScreen({super.key});
+class DetailMovieDBScreen extends StatefulWidget {
+  const DetailMovieDBScreen({super.key});
 
   @override
-  State<DetailMovieScreen> createState() => _DetailMovieScreenState();
+  State<DetailMovieDBScreen> createState() => _DetailMovieDBScreenState();
 }
 
-class _DetailMovieScreenState extends State<DetailMovieScreen> {
+class _DetailMovieDBScreenState extends State<DetailMovieDBScreen> {
   //bool _isFavorited = false;
   final TextStyle commonTextStyle = TextStyle(
     fontSize: 15.0,
@@ -65,7 +63,6 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
   void initState() {
     super.initState();
     agendaDB = AgendaDB();
-    bool isMovieInFavs = false;
   }
 
   @override
@@ -125,10 +122,10 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final movie = ModalRoute.of(context)!.settings.arguments as PopularModel;
+    final movie = ModalRoute.of(context)!.settings.arguments as FavModel;
 
     // Obtain the trailer key and set the YoutubePlayerController
-    fetchMovieTrailerKey(movie.id).then((trailerKey) {
+    fetchMovieTrailerKey(movie.idApi!).then((trailerKey) {
       setState(() {
         _controller = YoutubePlayerController(
           initialVideoId: trailerKey,
@@ -144,10 +141,10 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
     Widget? Favs;
     Favs = ElevatedButton(
       onPressed: () {
-        agendaDB!.checkIfMovieExists(movie.id).then((isMovieInFavs) {
+        agendaDB!.checkIfMovieExists(movie.idApi!).then((isMovieInFavs) {
           if (isMovieInFavs) {
             // Si la película está en la base de datos, eliminarla
-            agendaDB!.DELETE_Fav('tblFav', movie.id).then((value) {
+            agendaDB!.DELETE_Fav('tblFav', movie.idApi!).then((value) {
               GlobalValues.flagFavs.value = !GlobalValues.flagFavs.value;
               var msj =
                   (value > 0) ? 'Eliminación exitosa' : 'Ocurrió un error';
@@ -157,12 +154,11 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
           } else {
             // Si la película no está en la base de datos, agrégala
             agendaDB!.INSERT_Fav('tblFav', {
-              'idApi': movie.id,
+              'idApi': movie.idApi,
               'originalTitle': movie.originalTitle,
               'overview': movie.overview,
               'posterPath': movie.posterPath,
-              'releaseDate':
-                  'Release Date: ${DateFormat('dd-MM-yyyy').format(movie.releaseDate)}',
+              'releaseDate': movie.releaseDate,
               'title': movie.title,
               'voteAverage': movie.voteAverage
             }).then((value) {
@@ -175,7 +171,7 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
         });
       },
       child: FutureBuilder<bool>(
-        future: agendaDB!.checkIfMovieExists(movie.id),
+        future: agendaDB!.checkIfMovieExists(movie.idApi!),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             // Si la película está en la base de datos, muestra "Delete in Favs"
@@ -200,7 +196,7 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
         child: Padding(
           padding: EdgeInsets.all(0),
           child: FutureBuilder<List<Actor>>(
-            future: fetchMovieActors(movie.id),
+            future: fetchMovieActors(movie.idApi!),
             builder: (context, snapshot) {
               final actors = snapshot.data ?? [];
               if (actors.length == 10) {
@@ -306,13 +302,12 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
               color: Colors.white,
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/Favs');
               },
             ),
           ],
         ),
         actions: <Widget>[
-          //boton para favs
           Favs,
           SizedBox(width: 20.0),
         ],
@@ -320,7 +315,7 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
       body: Hero(
-        tag: 'moviePoster${movie.id}',
+        tag: 'moviePoster${movie.idApi}',
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -359,7 +354,7 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
                                 videoPlayer,
                                 SizedBox(height: 20.0),
                                 Text(
-                                  movie.title,
+                                  movie.title!,
                                   style: TextStyle(
                                     fontSize: 35.0,
                                     fontWeight: FontWeight.bold,
@@ -368,7 +363,7 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
                                   textAlign: TextAlign.center,
                                 ),
                                 Text(
-                                  movie.overview,
+                                  movie.overview!,
                                   style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
@@ -377,21 +372,20 @@ class _DetailMovieScreenState extends State<DetailMovieScreen> {
                                   textAlign: TextAlign.justify,
                                 ),
                                 SizedBox(height: 10.0),
-                                Text('Movie ID: ${movie.id}',
+                                Text('Movie ID: ${movie.idApi}',
                                     style: commonTextStyle),
                                 SizedBox(height: 10.0),
                                 Text('Original Title: ${movie.originalTitle}',
                                     style: commonTextStyle),
                                 SizedBox(height: 10.0),
-                                Text(
-                                    'Release Date: ${DateFormat('dd-MM-yyyy').format(movie.releaseDate)}',
+                                Text('${movie.releaseDate}',
                                     style: commonTextStyle),
                                 SizedBox(height: 10.0),
-                                Text('Rating: ${movie.voteAverage.ceil()}',
+                                Text('Rating: ${movie.voteAverage!.ceil()}',
                                     style: commonTextStyle),
                                 RatingBar.builder(
                                   ignoreGestures: true,
-                                  initialRating: movie.voteAverage,
+                                  initialRating: movie.voteAverage!,
                                   minRating: 0.5,
                                   direction: Axis.horizontal,
                                   itemCount: 10,

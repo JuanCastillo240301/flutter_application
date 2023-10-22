@@ -18,32 +18,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final data = [
-    CardPMovieData(
-      title: "Agrega a lista",
-      subtitle:
-          "Puedes crear listas con todas las peliculas para ver mas tarde.",
-      image: const AssetImage("assets/icon2.jpg"),
-      backgroundColor: Color.fromARGB(255, 83, 97, 163),
-      titleColor: const Color.fromARGB(255, 161, 29, 73),
-      subtitleColor: Color.fromARGB(255, 161, 29, 73),
-      background: LottieBuilder.asset("assets/a1.json")
-    ),    CardPMovieData(
-      title: "Mirar ahira",
-      subtitle: "Miles de peliculas a tu alcanza y a la palma de tu mano.",
-      image: const AssetImage("assets/icon3.jpg"),
-      backgroundColor: const Color.fromARGB(255, 234, 63, 63),
-      titleColor: const Color.fromARGB(255, 188, 139, 197),
-      subtitleColor: Color.fromARGB(255, 188, 139, 197),
-      background: LottieBuilder.asset("assets/a1.json")
-    ),    CardPMovieData(
-      title: "Realiza una Review",
-      subtitle: "Realiza reviews de las peliculas vistas y puntua con estrellas.",
-       image: const AssetImage("assets/icon4.png"),
-      backgroundColor: Color.fromARGB(255, 85, 85, 85),
-      titleColor: Color.fromARGB(227, 249, 226, 20),
-      subtitleColor: const Color.fromARGB(227, 249, 226, 20),
-      background: LottieBuilder.asset("assets/a1.json")
-    )];
+      CardPMovieData(
+          title: "Agrega a lista",
+          subtitle:
+              "Puedes crear listas con todas las peliculas para ver mas tarde.",
+          image: const AssetImage("assets/icon2.jpg"),
+          backgroundColor: Color.fromARGB(255, 83, 97, 163),
+          titleColor: const Color.fromARGB(255, 161, 29, 73),
+          subtitleColor: Color.fromARGB(255, 161, 29, 73),
+          background: LottieBuilder.asset("assets/a1.json")),
+      CardPMovieData(
+          title: "Mirar ahira",
+          subtitle: "Miles de peliculas a tu alcanza y a la palma de tu mano.",
+          image: const AssetImage("assets/icon3.jpg"),
+          backgroundColor: const Color.fromARGB(255, 234, 63, 63),
+          titleColor: const Color.fromARGB(255, 188, 139, 197),
+          subtitleColor: Color.fromARGB(255, 188, 139, 197),
+          background: LottieBuilder.asset("assets/a1.json")),
+      CardPMovieData(
+          title: "Realiza una Review",
+          subtitle:
+              "Realiza reviews de las peliculas vistas y puntua con estrellas.",
+          image: const AssetImage("assets/icon4.png"),
+          backgroundColor: Color.fromARGB(255, 85, 85, 85),
+          titleColor: Color.fromARGB(227, 249, 226, 20),
+          subtitleColor: const Color.fromARGB(227, 249, 226, 20),
+          background: LottieBuilder.asset("assets/a1.json"))
+    ];
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -52,15 +53,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       drawer: createDrawer(),
-      
-    body: ConcentricPageView(
-       colors: data.map((e) => e.backgroundColor).toList(),
-      itemCount: data.length, // null = infinity
-       
-       itemBuilder: (int index) {
-         return CardPlanet(data: data[index]);
-       },
-    ),
+      body: ConcentricPageView(
+        colors: data.map((e) => e.backgroundColor).toList(),
+        itemCount: data.length, // null = infinity
+
+        itemBuilder: (int index) {
+          return CardPlanet(data: data[index]);
+        },
+      ),
     );
   }
 
@@ -121,6 +121,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             onTap: () {
               Navigator.pushNamed(context, '/popular');
+            },
+          ),
+          ListTile(
+            leading: SizedBox(
+              width: 50.0, // Ancho deseado
+              height: 50.0, // Alto deseado
+              child: Image.asset(
+                'assets/favs.png',
+                height: 50,
+              ),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            title: Text(
+              'Favs Movies',
+              style: TextStyle(color: Colors.black, fontSize: 19.0),
+            ),
+            subtitle: Text(
+              'Lista de peliculas',
+              style: TextStyle(color: Colors.black, fontSize: 18.0),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/Favs');
             },
           ),
           ListTile(
@@ -215,10 +237,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           )
         ],
-      
       ),
-      
     );
-    
   }
 }

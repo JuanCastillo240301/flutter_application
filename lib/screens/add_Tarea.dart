@@ -11,6 +11,7 @@ import 'package:flutter_application_3/database/Noti.dart';
 import 'package:flutter_application_3/database/schooldb.dart';
 //import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
+
 //import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 //import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 DateTime scheduleTime = DateTime.now();
@@ -18,14 +19,12 @@ DateTime scheduleTime = DateTime.now();
 class AddTarea extends StatefulWidget {
   AddTarea({super.key, this.tareaModel});
 
-
   TareaModel? tareaModel;
   @override
   State<AddTarea> createState() => _AddTareaState();
 }
 
 class _AddTareaState extends State<AddTarea> {
-  
   DateTime? selectedDate1;
   List<TareaModel> _tasks = [];
   String _selectedEstado = 'Todas';
@@ -53,8 +52,8 @@ class _AddTareaState extends State<AddTarea> {
       txtConnameTarea.text = widget.tareaModel!.nomTarea!;
       desTarea.text = widget.tareaModel!.desTarea!;
       txtFechaExpiracion.text = widget.tareaModel!.fecExpiracion!;
-      txtFechaRecordatorio.text =widget.tareaModel!.fecRecordatorio!;
-      selectedProfesorId =  widget.tareaModel!.idProfesor!;
+      txtFechaRecordatorio.text = widget.tareaModel!.fecRecordatorio!;
+      selectedProfesorId = widget.tareaModel!.idProfesor!;
       switch (widget.tareaModel!.nomRealizada) {
         case 'Pendiente':
           dropDownValue = "Pendiente";
@@ -146,13 +145,12 @@ class _AddTareaState extends State<AddTarea> {
     final ElevatedButton btnGuardar = ElevatedButton(
         onPressed: () {
           String a = txtConnameTarea.text;
-           debugPrint('Notification Scheduled for $scheduleTime');
-        NotificationService().scheduleNotification(
-            title: 'La tarea $a esta proxima a vencer',
-            body: '$scheduleTime',
-            scheduledNotificationDateTime: scheduleTime);
+          debugPrint('Notification Scheduled for $scheduleTime');
+          NotificationService().scheduleNotification(
+              title: 'La tarea $a esta proxima a vencer',
+              body: '$scheduleTime',
+              scheduledNotificationDateTime: scheduleTime);
           if (widget.tareaModel == null) {
-           
             schoolDB!.INSERT_Tarea('tblTarea', {
               'nomTarea': txtConnameTarea.text,
               'fecExpiracion': txtFechaExpiracion.text,
@@ -162,9 +160,7 @@ class _AddTareaState extends State<AddTarea> {
               'idProfesor': selectedProfesorId!
             }).then((value) {
               GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
-              var msj = (value > 0)
-                  ? 'Tarea creada'
-                  : 'Ocurrió un error';
+              var msj = (value > 0) ? 'Tarea creada' : 'Ocurrió un error';
               var snackbar = SnackBar(content: Text(msj));
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
               Navigator.pop(context);
@@ -180,12 +176,10 @@ class _AddTareaState extends State<AddTarea> {
               'idProfesor': selectedProfesorId!
             }).then((value) {
               GlobalValues.flagTarea.value = !GlobalValues.flagTarea.value;
-              var msj = (value > 0)
-                  ? 'Tarea Actualizada'
-                  : 'Ocurrió un error';
+              var msj = (value > 0) ? 'Tarea Actualizada' : 'Ocurrió un error';
               var snackbar = SnackBar(content: Text(msj));
               ScaffoldMessenger.of(context).showSnackBar(snackbar);
-             
+
               Navigator.pop(context);
             });
           }
@@ -200,30 +194,32 @@ class _AddTareaState extends State<AddTarea> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            txtNameTarea,
-            space,
-            txtdesTarea,
-            space,
-            txtFecha1,
-            space,
-            txtFecha2,
-            
-            space,
-            dropdownCarrera,
-            space,
-            ddBStatus,
-            space,
-            btnGuardar
-          ],
+        child: Expanded(
+          flex: 3,
+          child: Column(
+            //mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              txtNameTarea,
+              space,
+              txtdesTarea,
+              space,
+              txtFecha1,
+              space,
+              txtFecha2,
+              space,
+              dropdownCarrera,
+              space,
+              ddBStatus,
+              space,
+              btnGuardar
+            ],
+          ),
         ),
       ),
     );
   }
 
- Future<void> _selectFechaExpiracion(BuildContext context) async {
+  Future<void> _selectFechaExpiracion(BuildContext context) async {
     DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -238,26 +234,21 @@ class _AddTareaState extends State<AddTarea> {
       });
     }
   }
-  
 
-Future<void> _selectFechaRecordatorio(BuildContext context) async {
-     await DatePicker.showDateTimePicker(
-          context,
-          showTitleActions: true,
-          onChanged: (date) => scheduleTime = date,
-          onConfirm: (date) {},
-        );
+  Future<void> _selectFechaRecordatorio(BuildContext context) async {
+    await DatePicker.showDateTimePicker(
+      context,
+      showTitleActions: true,
+      onChanged: (date) => scheduleTime = date,
+      onConfirm: (date) {},
+    );
 
-      setState(() {
-        String formattedDate = DateFormat('yyyy-MM-dd').format(scheduleTime);
-        txtFechaRecordatorio.text = formattedDate;
-      });
-    }
-  
+    setState(() {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(scheduleTime);
+      txtFechaRecordatorio.text = formattedDate;
+    });
+  }
 }
-
-
-
 
 class DatePickerTxt extends StatefulWidget {
   const DatePickerTxt({
@@ -279,7 +270,6 @@ class _DatePickerTxtState extends State<DatePickerTxt> {
           onChanged: (date) => scheduleTime = date,
           onConfirm: (date) {},
         );
-          
       },
       child: const Text(
         'Selecciona la fecha y hora del recordatorio',
