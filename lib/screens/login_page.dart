@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/screens/firebase/email.auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,7 +48,9 @@ class _ContenidoState extends State<Contenido> {
               fontSize: 30,
             ),
           ),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           Text(
             'Bienvenido',
             style: const TextStyle(
@@ -56,7 +59,9 @@ class _ContenidoState extends State<Contenido> {
               fontSize: 10,
             ),
           ),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           Datos(
             emailController: emailController,
             passwordController: passwordController,
@@ -68,7 +73,10 @@ class _ContenidoState extends State<Contenido> {
 }
 
 class Datos extends StatefulWidget {
-  const Datos({Key? key, required this.emailController, required this.passwordController})
+  const Datos(
+      {Key? key,
+      required this.emailController,
+      required this.passwordController})
       : super(key: key);
 
   final TextEditingController emailController;
@@ -80,10 +88,9 @@ class Datos extends StatefulWidget {
 
 class _DatosState extends State<Datos> {
   bool obs = true;
-
+  final emailAith = mailAuth();
   bool isEmailValid(String email) {
-    final emailRegExp =
-        RegExp(r"^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    final emailRegExp = RegExp(r"^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
     return emailRegExp.hasMatch(email);
   }
@@ -94,7 +101,7 @@ class _DatosState extends State<Datos> {
     return passwordRegExp.hasMatch(password);
   }
 
-  void _login() {
+  Future<void> _login() async {
     final String email = widget.emailController.text.trim();
     final String password = widget.passwordController.text.trim();
 
@@ -121,9 +128,12 @@ class _DatosState extends State<Datos> {
 
     // Puedes agregar aquí la lógica de autenticación
     // ...
-
+    bool res = await emailAith.validUser(emailUser: email, passUser: password);
+    if (res) {
+      Navigator.pushNamed(context, '/dash');
+    }
     // Si la autenticación es exitosa, redirige al dashboard
-    Navigator.pushNamed(context, '/dash');
+    // Navigator.pushNamed(context, '/dash');
   }
 
   void _showToast(String message) {
@@ -148,11 +158,11 @@ class _DatosState extends State<Datos> {
           const Text(
             'Email',
             style: TextStyle(
-                color: Colors.red,
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold),
+                color: Colors.red, fontSize: 25.0, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 5,),
+          const SizedBox(
+            height: 5,
+          ),
           TextFormField(
             controller: widget.emailController,
             keyboardType: TextInputType.emailAddress,
@@ -164,15 +174,17 @@ class _DatosState extends State<Datos> {
             ),
             style: TextStyle(color: Colors.red),
           ),
-          const SizedBox(height: 5,),
+          const SizedBox(
+            height: 5,
+          ),
           const Text(
             'Password',
             style: TextStyle(
-                color: Colors.red,
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold),
+                color: Colors.red, fontSize: 25.0, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 5,),
+          const SizedBox(
+            height: 5,
+          ),
           TextField(
             obscureText: obs,
             controller: widget.passwordController,
@@ -193,7 +205,9 @@ class _DatosState extends State<Datos> {
             style: TextStyle(color: Colors.red),
           ),
           const Remember(),
-          const SizedBox(height: 30,),
+          const SizedBox(
+            height: 30,
+          ),
           Botones(onPressed: _login),
         ],
       ),
@@ -257,6 +271,16 @@ class _RememberState extends State<Remember> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          TextButton(
+              onPressed: () => {Navigator.pushNamed(context, '/register')},
+              child: Text(
+                'Registrate',
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
         ],
       ),
     );
@@ -284,8 +308,8 @@ class Botones extends StatelessWidget {
               ),
             ),
             style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Color.fromARGB(255, 255, 0, 0)),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                  Color.fromARGB(255, 255, 0, 0)),
             ),
           ),
         ),

@@ -30,6 +30,9 @@ dependencies:
   timezone: ^0.9.2
   flutter_datetime_picker_plus: ^2.1.0
   youtube_player_flutter: ^8.1.2
+  firebase_core: ^2.21.0
+  cloud_firestore: ^4.12.2
+  firebase_auth: ^4.12.1
   
   
   

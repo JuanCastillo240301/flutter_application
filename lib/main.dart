@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/assets/global_values.dart';
 import 'package:flutter_application_3/assets/styles_app.dart';
@@ -10,11 +11,11 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   NotificationService().initNotification();
-   tz.initializeTimeZones();
+  tz.initializeTimeZones();
   // Inicializa SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   // Recupera el estado del tema
@@ -24,6 +25,7 @@ void main() async {
   bool rememberMe = prefs.getBool('rememberMe') ?? false;
 
   // Redirige a la pantalla correspondiente
+
   runApp(MyApp(
     isDarkModeEnabled: isDarkModeEnabled,
     rememberMe: rememberMe,

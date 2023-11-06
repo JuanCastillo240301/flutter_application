@@ -15,6 +15,7 @@ import 'package:flutter_application_3/screens/dashboard_screen.dart';
 import 'package:flutter_application_3/screens/login_page.dart';
 import 'package:flutter_application_3/screens/movie_details.dart';
 import 'package:flutter_application_3/screens/popular_screen.dart';
+import 'package:flutter_application_3/screens/register_screen.dart';
 import 'package:flutter_application_3/screens/task_screen.dart';
 
 Map<String, WidgetBuilder> getroutes() {
@@ -36,5 +37,6 @@ Map<String, WidgetBuilder> getroutes() {
     '/profesor': (BuildContext context) => const ProfesorScreen(),
     '/add_Tarea': (BuildContext context) => AddTarea(),
     '/tarea': (BuildContext context) => const TareaScreen(),
+    '/register': (BuildContext context) => const RegisterScreen(),
   };
 }
